@@ -1,0 +1,72 @@
+# IMMUNIS ACIN — Python Dependencies
+# AMD Developer Hackathon 2025
+
+# === Core Framework ===
+fastapi>=0.110.0
+uvicorn[standard]>=0.27.0
+pydantic>=2.6.0
+pydantic-settings>=2.1.0
+python-dotenv>=1.0.0
+python-multipart>=0.0.9
+
+# === HTTP Clients ===
+httpx>=0.27.0
+aiohttp>=3.9.0
+openai>=1.12.0  # OpenAI-compatible API client (works with vLLM, AIsa.one, Groq)
+
+# === WebSocket ===
+websockets>=12.0
+
+# === Cryptography ===
+cryptography>=42.0.0
+pynacl>=1.5.0  # Ed25519
+# liboqs-python  # Post-quantum (CRYSTALS-Dilithium) — install separately if available
+
+# === Vector Store & ML ===
+faiss-cpu>=1.7.4  # Use faiss-gpu on AMD via ROCm if available
+numpy>=1.26.0
+scipy>=1.12.0
+scikit-learn>=1.4.0
+sentence-transformers>=2.5.0  # LaBSE embeddings
+
+# === Data Processing ===
+pandas>=2.2.0
+aiofiles>=23.2.1
+
+# === Database ===
+sqlalchemy>=2.0.0
+aiosqlite>=0.20.0  # Async SQLite
+
+# === Security ===
+python-jose[cryptography]>=3.3.0  # JWT
+passlib[bcrypt]>=1.7.4  # Password hashing
+z3-solver>=4.12.0  # Formal verification (Z3 theorem prover)
+
+# === Monitoring ===
+structlog>=24.1.0  # Structured logging
+rich>=13.7.0  # Pretty console output
+
+# === STIX/TAXII ===
+stix2>=3.0.0  # STIX 2.1 object creation
+taxii2-client>=2.3.0  # TAXII client (for testing)
+medallion>=3.0.0  # TAXII server implementation
+
+# === Testing ===
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
+pytest-cov>=4.1.0
+pytest-benchmark>=4.0.0
+httpx  # For async API testing
+
+# === Fine-tuning (install on AMD Developer Cloud only) ===
+# torch>=2.2.0  # ROCm version — install via AMD instructions
+# transformers>=4.38.0
+# peft>=0.9.0
+# trl>=0.7.0
+# bitsandbytes>=0.42.0  # ROCm fork
+# datasets>=2.18.0
+# accelerate>=0.27.0
+# vllm>=0.3.0  # ROCm version
+
+# === HuggingFace Space ===
+# gradio>=4.19.0  # Install in space/ directory only

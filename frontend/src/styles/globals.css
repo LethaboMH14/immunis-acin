@@ -1,0 +1,216 @@
+/* frontend/src/styles/globals.css */
+/* Tailwind v3 + Theme variables + Design tokens */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Midnight Theme (Default) ─────────────────────────────────── */
+
+[data-theme="midnight"] {
+  --bg-primary: #0A0E1A;
+  --bg-secondary: #111827;
+  --bg-tertiary: #1F2937;
+  --border-primary: #374151;
+  --border-subtle: #1F2937;
+  --border-hover: #4B5563;
+  --text-primary: #F9FAFB;
+  --text-secondary: #D1D5DB;
+  --text-muted: #6B7280;
+  --color-immune: #00E5A0;
+  --color-threat: #FF4D6A;
+  --color-warning: #FFAA33;
+  --color-novel: #A78BFA;
+  --color-mesh: #38BDF8;
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.4);
+  --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.5);
+  --glass-bg: rgba(17,24,39,0.8);
+  --glass-border: rgba(55,65,81,0.5);
+  --glass-blur: 12px;
+  --sidebar-bg: #0D1117;
+}
+
+/* ─── Twilight Theme ───────────────────────────────────────────── */
+
+[data-theme="twilight"] {
+  --bg-primary: #1A1F2E;
+  --bg-secondary: #242B3D;
+  --bg-tertiary: #2E3650;
+  --border-primary: #3D4663;
+  --border-subtle: #2E3650;
+  --border-hover: #4D5875;
+  --text-primary: #E8ECF4;
+  --text-secondary: #B8C0D0;
+  --text-muted: #7A849B;
+  --color-immune: #00E5A0;
+  --color-threat: #FF4D6A;
+  --color-warning: #FFAA33;
+  --color-novel: #A78BFA;
+  --color-mesh: #38BDF8;
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.25);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.35);
+  --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.45);
+  --glass-bg: rgba(36,43,61,0.8);
+  --glass-border: rgba(61,70,99,0.5);
+  --glass-blur: 12px;
+  --sidebar-bg: #151A27;
+}
+
+/* ─── Overcast Theme ───────────────────────────────────────────── */
+
+[data-theme="overcast"] {
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #F1F5F9;
+  --border-primary: #E2E8F0;
+  --border-subtle: #F1F5F9;
+  --border-hover: #CBD5E1;
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
+  --text-muted: #94A3B8;
+  --color-immune: #00C98A;
+  --color-threat: #E11D48;
+  --color-warning: #D97706;
+  --color-novel: #7C3AED;
+  --color-mesh: #0284C7;
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.12);
+  --glass-bg: rgba(255,255,255,0.8);
+  --glass-border: rgba(226,232,240,0.5);
+  --glass-blur: 12px;
+  --sidebar-bg: #F1F5F9;
+}
+
+/* ─── Base Layer ───────────────────────────────────────────────── */
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    overflow: hidden;
+    min-height: 100vh;
+  }
+
+  #root {
+    width: 100vw;
+    height: 100vh;
+  }
+
+  /* Ensure all text inherits the theme colors */
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+  }
+
+  p {
+    color: var(--text-secondary);
+  }
+}
+
+/* ─── Scrollbar ────────────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-primary);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-hover);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-primary) transparent;
+}
+
+/* ─── Component Layer ──────────────────────────────────────────── */
+
+@layer components {
+  /* Card styles that reference CSS variables */
+  .card-default {
+    @apply rounded-xl overflow-hidden;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    box-shadow: var(--shadow-md);
+  }
+
+  .card-flat {
+    @apply rounded-xl overflow-hidden;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .card-glass {
+    @apply rounded-xl overflow-hidden backdrop-blur-xl;
+    background-color: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+/* ─── Utility Layer ────────────────────────────────────────────── */
+
+@layer utilities {
+  .font-mono {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* ─── Animations ───────────────────────────────────────────────── */
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes indeterminate {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 229, 160, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(0, 229, 160, 0); }
+}
+
+/* ─── Reduced Motion ───────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

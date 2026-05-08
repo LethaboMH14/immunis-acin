@@ -1,0 +1,115 @@
+/**
+ * IMMUNIS ACIN — Overcast Theme (Light)
+ * 
+ * For executives in bright offices and compliance officers.
+ * Warm whites, clean separation, professional appearance.
+ * Semantic colors adjusted for contrast on light backgrounds.
+ */
+
+[data-theme="overcast"] {
+  /* Backgrounds */
+  --color-bg-primary: #F8FAFC;
+  --color-bg-secondary: #FFFFFF;
+  --color-bg-tertiary: #F1F5F9;
+  --color-bg-elevated: #FFFFFF;
+  --color-bg-hover: #F1F5F9;
+  --color-bg-active: #E2E8F0;
+  --color-bg-overlay: rgba(248, 250, 252, 0.9);
+  --color-bg-input: #FFFFFF;
+
+  /* Borders */
+  --color-border-primary: #E2E8F0;
+  --color-border-secondary: #F1F5F9;
+  --color-border-focus: #00C98A;
+  --color-border-hover: #CBD5E1;
+
+  /* Text */
+  --color-text-primary: #0F172A;
+  --color-text-secondary: #475569;
+  --color-text-tertiary: #94A3B8;
+  --color-text-disabled: #CBD5E1;
+  --color-text-inverse: #F9FAFB;
+  --color-text-link: #0284C7;
+  --color-text-link-hover: #0369A1;
+
+  /* Semantic — Status (darker variants for light bg contrast) */
+  --color-immune: #00C98A;
+  --color-immune-dim: rgba(0, 201, 138, 0.1);
+  --color-immune-glow: rgba(0, 201, 138, 0.15);
+  --color-threat: #E11D48;
+  --color-threat-dim: rgba(225, 29, 72, 0.08);
+  --color-threat-glow: rgba(225, 29, 72, 0.12);
+  --color-warning: #D97706;
+  --color-warning-dim: rgba(217, 119, 6, 0.08);
+  --color-novel: #7C3AED;
+  --color-novel-dim: rgba(124, 58, 237, 0.08);
+  --color-mesh: #0284C7;
+  --color-mesh-dim: rgba(2, 132, 199, 0.08);
+  --color-synthesis: #059669;
+  --color-synthesis-dim: rgba(5, 150, 105, 0.08);
+  --color-adversarial: #DB2777;
+  --color-adversarial-dim: rgba(219, 39, 119, 0.08);
+  --color-info: #2563EB;
+  --color-info-dim: rgba(37, 99, 235, 0.08);
+
+  /* Severity */
+  --color-severity-critical: #E11D48;
+  --color-severity-high: #EA580C;
+  --color-severity-medium: #D97706;
+  --color-severity-low: #0284C7;
+  --color-severity-info: #94A3B8;
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #00C98A, #0284C7);
+  --gradient-threat: linear-gradient(135deg, #E11D48, #DB2777);
+  --gradient-intelligence: linear-gradient(135deg, #7C3AED, #2563EB);
+  --gradient-surface: linear-gradient(180deg, #FFFFFF, #F8FAFC);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.1);
+  --shadow-glow-immune: 0 0 20px rgba(0, 201, 138, 0.1);
+  --shadow-glow-threat: 0 0 20px rgba(225, 29, 72, 0.1);
+  --shadow-glow-mesh: 0 0 20px rgba(2, 132, 199, 0.1);
+  --shadow-glow-novel: 0 0 20px rgba(124, 58, 237, 0.1);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-card-hover: 0 4px 16px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
+
+  /* Glass morphism (light version) */
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(0, 0, 0, 0.06);
+  --glass-blur: 12px;
+
+  /* Sidebar specific */
+  --sidebar-bg: #FFFFFF;
+  --sidebar-border: #E2E8F0;
+  --sidebar-item-active-bg: rgba(0, 201, 138, 0.08);
+  --sidebar-item-hover-bg: #F8FAFC;
+
+  /* Scrollbar */
+  --scrollbar-track: #F1F5F9;
+  --scrollbar-thumb: #CBD5E1;
+  --scrollbar-thumb-hover: #94A3B8;
+
+  /* Code/Terminal */
+  --color-code-bg: #F8FAFC;
+  --color-code-border: #E2E8F0;
+  --color-code-text: #1E293B;
+  --color-code-comment: #94A3B8;
+  --color-code-keyword: #7C3AED;
+  --color-code-string: #059669;
+  --color-code-number: #D97706;
+  --color-code-function: #2563EB;
+
+  /* Chart colors */
+  --chart-line-1: #00C98A;
+  --chart-line-2: #0284C7;
+  --chart-line-3: #7C3AED;
+  --chart-line-4: #DB2777;
+  --chart-line-5: #D97706;
+  --chart-area-opacity: 0.06;
+  --chart-grid: #E2E8F0;
+  --chart-axis: #94A3B8;
+}

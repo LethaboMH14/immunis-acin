@@ -1,0 +1,30 @@
+[project]
+name = "immunis-acin"
+version = "1.0.0"
+description = "Adversarial Coevolutionary Immune Network — The world's first self-evolving multilingual cyber immune system"
+authors = [{name = "LethaboMH14"}]
+requires-python = ">=3.11"
+license = {text = "MIT"}
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = [
+    "integration: marks tests that require external services",
+    "benchmark: marks performance benchmark tests",
+    "security: marks security-specific tests",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "S", "B", "A", "C4", "SIM"]
+ignore = ["E501"]  # Line length handled by formatter
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true

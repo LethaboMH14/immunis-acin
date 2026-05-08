@@ -1,0 +1,66 @@
+# IMMUNIS ACIN — Git Ignore
+
+# Environment
+.env
+*.env.local
+immunis-env/
+venv/
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Data
+data/
+*.db
+*.sqlite
+*.faiss
+training/data/threats/
+training/data/legitimate/
+training/data/visual/
+
+# Models (too large for git)
+*.bin
+*.safetensors
+*.pt
+*.pth
+*.onnx
+model_weights/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.windsurf/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.next/
+
+# Logs
+*.log
+logs/
+
+# Test artifacts
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Secrets
+*.pem
+*.key
+*.cert

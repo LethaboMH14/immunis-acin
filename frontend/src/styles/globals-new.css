@@ -1,0 +1,508 @@
+/**
+ * IMMUNIS ACIN — Global Styles
+ * 
+ * Design system foundation:
+ * - Tailwind CSS base
+ * - Theme imports (midnight, twilight, overcast)
+ * - Design tokens (spacing, radius, typography, transitions)
+ * - Scrollbar styling
+ * - Utility classes
+ * - Base element resets
+ */
+
+@import "tailwindcss";
+@import "./themes/midnight.css";
+@import "./themes/twilight.css";
+@import "./themes/overcast.css";
+
+/* =========================================================================
+   DESIGN TOKENS — Shared across all themes
+   ========================================================================= */
+
+:root {
+  /* Spacing scale (4px base) */
+  --space-0: 0px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* Typography scale */
+  --font-display: 'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-base: 14px;
+  --text-md: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 28px;
+  --text-4xl: 32px;
+  --text-5xl: 40px;
+  --text-6xl: 48px;
+
+  --leading-tight: 1.2;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0em;
+  --tracking-wide: 0.04em;
+  --tracking-wider: 0.08em;
+
+  /* Font weights */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* Transitions */
+  --transition-fast: 100ms ease;
+  --transition-base: 200ms ease;
+  --transition-slow: 300ms ease;
+  --transition-slower: 500ms ease;
+  --transition-spring: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Z-index scale */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-popover: 500;
+  --z-toast: 600;
+  --z-tooltip: 700;
+  --z-command: 800;
+
+  /* Layout dimensions */
+  --sidebar-width-collapsed: 64px;
+  --sidebar-width-expanded: 240px;
+  --topbar-height: 56px;
+  --right-panel-width: 380px;
+  --content-max-width: 1600px;
+
+  /* Density modes */
+  --density-compact-spacing: 0.75;
+  --density-comfortable-spacing: 1;
+  --density-spacious-spacing: 1.25;
+}
+
+/* Density modifiers */
+[data-density="compact"] {
+  --space-multiplier: 0.75;
+}
+
+[data-density="comfortable"] {
+  --space-multiplier: 1;
+}
+
+[data-density="spacious"] {
+  --space-multiplier: 1.25;
+}
+
+/* =========================================================================
+   BASE RESETS
+   ========================================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-body);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-normal);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
+  transition: background-color var(--transition-slow), color var(--transition-slow);
+  overflow-x: hidden;
+}
+
+/* =========================================================================
+   SCROLLBAR STYLING
+   ========================================================================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* =========================================================================
+   TYPOGRAPHY UTILITIES
+   ========================================================================= */
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.text-display {
+  font-family: var(--font-display);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-3xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+.text-heading-1 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-xl);
+  line-height: var(--leading-tight);
+}
+
+.text-heading-2 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-lg);
+  line-height: var(--leading-tight);
+}
+
+.text-body {
+  font-family: var(--font-body);
+  font-weight: var(--weight-regular);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+}
+
+.text-caption {
+  font-family: var(--font-body);
+  font-weight: var(--weight-regular);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--color-text-secondary);
+}
+
+.text-label {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-xs);
+  line-height: 1;
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.text-metric {
+  font-family: var(--font-body);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-4xl);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.text-metric-sm {
+  font-family: var(--font-body);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-2xl);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* =========================================================================
+   COMPONENT UTILITIES
+   ========================================================================= */
+
+.card {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+}
+
+.card:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--color-border-hover);
+}
+
+.card-flat {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-lg);
+}
+
+.card-glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+}
+
+.surface-elevated {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--radius-lg);
+}
+
+/* =========================================================================
+   INTERACTIVE UTILITIES
+   ========================================================================= */
+
+.interactive {
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.interactive:hover {
+  background: var(--color-bg-hover);
+}
+
+.interactive:active {
+  background: var(--color-bg-active);
+  transform: scale(0.98);
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+.glow-immune {
+  box-shadow: var(--shadow-glow-immune);
+}
+
+.glow-threat {
+  box-shadow: var(--shadow-glow-threat);
+}
+
+.glow-mesh {
+  box-shadow: var(--shadow-glow-mesh);
+}
+
+.glow-novel {
+  box-shadow: var(--shadow-glow-novel);
+}
+
+/* =========================================================================
+   STATUS INDICATORS
+   ========================================================================= */
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.status-dot-immune { background: var(--color-immune); }
+.status-dot-threat { background: var(--color-threat); }
+.status-dot-warning { background: var(--color-warning); }
+.status-dot-novel { background: var(--color-novel); }
+.status-dot-mesh { background: var(--color-mesh); }
+.status-dot-info { background: var(--color-info); }
+
+.status-dot-pulse {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* =========================================================================
+   SEVERITY BADGES
+   ========================================================================= */
+
+.severity-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.severity-critical {
+  background: var(--color-threat-dim);
+  color: var(--color-severity-critical);
+}
+
+.severity-high {
+  background: rgba(249, 115, 22, 0.12);
+  color: var(--color-severity-high);
+}
+
+.severity-medium {
+  background: var(--color-warning-dim);
+  color: var(--color-severity-medium);
+}
+
+.severity-low {
+  background: var(--color-mesh-dim);
+  color: var(--color-severity-low);
+}
+
+.severity-info {
+  background: var(--color-info-dim);
+  color: var(--color-severity-info);
+}
+
+/* =========================================================================
+   LAYOUT UTILITIES
+   ========================================================================= */
+
+.page-container {
+  padding: var(--space-6);
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  width: 100%;
+}
+
+.section-gap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.grid-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-4);
+}
+
+/* =========================================================================
+   ANIMATION UTILITIES
+   ========================================================================= */
+
+.animate-fade-in {
+  animation: fade-in var(--transition-slow) ease forwards;
+}
+
+.animate-slide-up {
+  animation: slide-up var(--transition-slow) ease forwards;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right var(--transition-slow) ease forwards;
+}
+
+.animate-scale-in {
+  animation: scale-in var(--transition-base) var(--transition-spring) forwards;
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 3s ease-in-out infinite;
+}
+
+/* Reduce motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* =========================================================================
+   SELECTION
+   ========================================================================= */
+
+::selection {
+  background: var(--color-immune-dim);
+  color: var(--color-text-primary);
+}
+
+/* =========================================================================
+   FOCUS MANAGEMENT
+   ========================================================================= */
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* =========================================================================
+   RESPONSIVE BREAKPOINTS (reference)
+   sm: 640px
+   md: 768px
+   lg: 1024px
+   xl: 1280px
+   2xl: 1536px
+   ========================================================================= */
+
+@media (max-width: 1024px) {
+  :root {
+    --sidebar-width-collapsed: 0px;
+    --right-panel-width: 100%;
+  }
+}

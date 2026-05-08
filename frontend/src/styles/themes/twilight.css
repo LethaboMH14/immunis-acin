@@ -1,0 +1,115 @@
+/**
+ * IMMUNIS ACIN — Twilight Theme (Medium)
+ * 
+ * Balanced dark-blue-grey for extended use.
+ * Less contrast than Midnight, easier on eyes for 8+ hour shifts.
+ * Warmer undertones than pure dark.
+ */
+
+[data-theme="twilight"] {
+  /* Backgrounds */
+  --color-bg-primary: #1A1F2E;
+  --color-bg-secondary: #242B3D;
+  --color-bg-tertiary: #2E3650;
+  --color-bg-elevated: #283045;
+  --color-bg-hover: #333D55;
+  --color-bg-active: #3D4968;
+  --color-bg-overlay: rgba(26, 31, 46, 0.85);
+  --color-bg-input: #2E3650;
+
+  /* Borders */
+  --color-border-primary: rgba(59, 69, 99, 0.6);
+  --color-border-secondary: rgba(59, 69, 99, 0.35);
+  --color-border-focus: #00E5A0;
+  --color-border-hover: rgba(59, 69, 99, 0.8);
+
+  /* Text */
+  --color-text-primary: #E8ECF4;
+  --color-text-secondary: #8B95A8;
+  --color-text-tertiary: #5C6478;
+  --color-text-disabled: #4A5268;
+  --color-text-inverse: #1A1F2E;
+  --color-text-link: #38BDF8;
+  --color-text-link-hover: #7DD3FC;
+
+  /* Semantic — Status */
+  --color-immune: #00E5A0;
+  --color-immune-dim: rgba(0, 229, 160, 0.12);
+  --color-immune-glow: rgba(0, 229, 160, 0.2);
+  --color-threat: #FF4D6A;
+  --color-threat-dim: rgba(255, 77, 106, 0.12);
+  --color-threat-glow: rgba(255, 77, 106, 0.2);
+  --color-warning: #FFAA33;
+  --color-warning-dim: rgba(255, 170, 51, 0.12);
+  --color-novel: #A78BFA;
+  --color-novel-dim: rgba(167, 139, 250, 0.12);
+  --color-mesh: #38BDF8;
+  --color-mesh-dim: rgba(56, 189, 248, 0.12);
+  --color-synthesis: #34D399;
+  --color-synthesis-dim: rgba(52, 211, 153, 0.12);
+  --color-adversarial: #F472B6;
+  --color-adversarial-dim: rgba(244, 114, 182, 0.12);
+  --color-info: #60A5FA;
+  --color-info-dim: rgba(96, 165, 250, 0.12);
+
+  /* Severity */
+  --color-severity-critical: #FF4D6A;
+  --color-severity-high: #F97316;
+  --color-severity-medium: #FFAA33;
+  --color-severity-low: #38BDF8;
+  --color-severity-info: #5C6478;
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #00E5A0, #38BDF8);
+  --gradient-threat: linear-gradient(135deg, #FF4D6A, #F472B6);
+  --gradient-intelligence: linear-gradient(135deg, #A78BFA, #60A5FA);
+  --gradient-surface: linear-gradient(180deg, #242B3D, #1A1F2E);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.18);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.25);
+  --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.3);
+  --shadow-glow-immune: 0 0 20px rgba(0, 229, 160, 0.12);
+  --shadow-glow-threat: 0 0 20px rgba(255, 77, 106, 0.12);
+  --shadow-glow-mesh: 0 0 20px rgba(56, 189, 248, 0.12);
+  --shadow-glow-novel: 0 0 20px rgba(167, 139, 250, 0.12);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.15), 0 0 1px rgba(255, 255, 255, 0.04);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.22), 0 0 1px rgba(255, 255, 255, 0.06);
+
+  /* Glass morphism */
+  --glass-bg: rgba(36, 43, 61, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --glass-blur: 12px;
+
+  /* Sidebar specific */
+  --sidebar-bg: #161B28;
+  --sidebar-border: rgba(59, 69, 99, 0.4);
+  --sidebar-item-active-bg: rgba(0, 229, 160, 0.08);
+  --sidebar-item-hover-bg: rgba(255, 255, 255, 0.04);
+
+  /* Scrollbar */
+  --scrollbar-track: #242B3D;
+  --scrollbar-thumb: #3B4563;
+  --scrollbar-thumb-hover: #4D5A78;
+
+  /* Code/Terminal */
+  --color-code-bg: #1E2536;
+  --color-code-border: rgba(59, 69, 99, 0.5);
+  --color-code-text: #E8ECF4;
+  --color-code-comment: #5C6478;
+  --color-code-keyword: #A78BFA;
+  --color-code-string: #34D399;
+  --color-code-number: #FFAA33;
+  --color-code-function: #60A5FA;
+
+  /* Chart colors */
+  --chart-line-1: #00E5A0;
+  --chart-line-2: #38BDF8;
+  --chart-line-3: #A78BFA;
+  --chart-line-4: #F472B6;
+  --chart-line-5: #FFAA33;
+  --chart-area-opacity: 0.08;
+  --chart-grid: rgba(59, 69, 99, 0.3);
+  --chart-axis: #5C6478;
+}
