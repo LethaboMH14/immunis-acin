@@ -69,10 +69,10 @@ export function ThreatDetail({ threat }: ThreatDetailProps) {
       {/* Classification header */}
       <Section label="Classification">
         <div className="flex flex-wrap gap-2 mb-2">
-          <Badge variant={getSeverityVariant(threat.severity)} dot>
+          <Badge variant={getSeverityVariant(threat.severity ?? 'Medium')} dot>
             {threat.severity}
           </Badge>
-          <Badge variant={getClassificationVariant(threat.classification)}>
+          <Badge variant={getClassificationVariant(threat.classification ?? 'unknown')}>
             {threat.classification}
           </Badge>
           {threat.language && (
@@ -81,10 +81,10 @@ export function ThreatDetail({ threat }: ThreatDetailProps) {
             </Badge>
           )}
         </div>
-        <Field label="Family" value={threat.family || threat.type} />
+        <Field label="Family" value={threat.attack_family || threat.attack_type} />
         <Field label="Vector" value={threat.vector} />
         <Field label="Incident ID" value={
-          <span className="font-mono text-[10px]">{threat.id}</span>
+          <span className="font-mono text-[10px]">{threat.incident_id}</span>
         } />
       </Section>
 
@@ -133,13 +133,11 @@ export function ThreatDetail({ threat }: ThreatDetailProps) {
       </Section>
 
       {/* Fingerprint */}
-      {threat.fingerprint && (
+      {threat.fingerprint_id && (
         <Section label="Fingerprint">
           <div className="p-2 rounded bg-[var(--bg-tertiary)]">
             <span className="text-[10px] font-mono text-[var(--text-muted)] break-all">
-              {typeof threat.fingerprint === 'string'
-                ? threat.fingerprint
-                : JSON.stringify(threat.fingerprint).slice(0, 120) + '...'}
+              {threat.fingerprint_id}
             </span>
           </div>
         </Section>

@@ -1,0 +1,81 @@
+{
+  "id": "demo-mandarin-supply-001",
+  "name": "Mandarin Supply Chain Attack — Semiconductor Firmware Update Compromise",
+  "act": 5,
+  "demo_timing": {
+    "submit_at_seconds": 270,
+    "expected_pipeline_seconds": 20,
+    "narration_start": "A supply chain attack in Mandarin. A compromised firmware update notice from a semiconductor supplier — kind of attack that hit SolarWinds."
+  },
+  "threat": {
+    "content_type": "email",
+    "source": "email",
+    "subject": "【紧急安全通告】固件版本 v3.8.1 严重漏洞修复 — 请立即更新",
+    "sender": {
+      "display_name": "华芯微电子安全响应中心",
+      "email": "security-advisory@huaxin-semi.com.cn",
+      "spoofed_domain": "huaxin-serni.com.cn",
+      "homoglyph_note": "'rn' used to impersonate 'm' in 'semi' — same technique as Sesotho threat, showing attack family consistency"
+    },
+    "recipient": {
+      "display_name": "张工程师",
+      "role": "Firmware Integration Lead",
+      "organization": "深圳创新科技有限公司 (Shenzhen Innovation Technology Co., Ltd.)"
+    },
+    "headers": {
+      "reply_to": "huaxin.security@proton.me",
+      "x_originating_ip": "103.224.182.45",
+      "received_from": "smtp.offshore-relay.top"
+    },
+    "body": "张工程师，您好！\n\n华芯微电子安全响应中心（HX-CERT）在此发布紧急安全通告。\n\n我们在HX-7000系列芯片的固件中发现了一个严重安全漏洞（CVE-2025-28941），CVSS评分9.8（严重）。该漏洞存在于安全启动验证模块中，攻击者可通过精心构造的固件映像绕过签名验证，实现任意代码执行。\n\n【影响范围】\n• HX-7000全系列（HX-7100/7200/7300/7500）\n• 固件版本 v3.7.x 及以下\n• 影响所有使用上述芯片的产品线\n\n【漏洞详情】\n• 漏洞类型：安全启动绕过 + 远程代码执行\n• 攻击向量：网络（无需物理接触）\n• 攻击复杂度：低\n• 利用状态：已发现野外利用（在野攻击确认）\n\n【紧急修复】\n请立即下载并部署修复固件 v3.8.1：\n\n主站下载：https://huaxin-serni.com.cn/firmware/HX7000/v3.8.1/security-patch.bin\n备用镜像：https://cdn-fw.huaxin-update.cn/emergency/HX7000-v381-signed.bin\n\n校验信息：\nSHA256: a3f8d2e1b4c5... (完整哈希值见附件PGP签名文件)\nPGP签名：已附在security-patch.bin.asc中\n\n请注意：由于漏洞已被在野利用，我们强烈建议在24小时内完成所有受影响设备的更新。延迟更新可能导致：\n1. 供应链产品被植入恶意代码\n2. 客户产品面临远程攻击风险\n3. 相关产品认证（CC EAL4+）可能被撤销\n\n如有技术问题，请联系技术支持热线：400-888-7000（工作日 8:00-22:00）\n或发送邮件至：fw-support@huaxin-serni.com.cn\n\n此通告为华芯微电子保密信息，仅供收件人及其授权团队使用。\n\n华芯微电子安全响应中心\nHX-CERT-2025-0394\n发布时间：2025年5月9日 14:30 CST",
+    "body_english_gloss": "Engineer Zhang, greetings!\n\nThe Huaxin Microelectronics Security Response Center (HX-CERT) hereby issues an emergency security advisory.\n\nWe have discovered a critical security vulnerability (CVE-2025-28941) in firmware of HX-7000 series chips, with a CVSS score of 9.8 (Critical). The vulnerability exists in the secure boot verification module, allowing attackers to bypass signature verification through a specially crafted firmware image and achieve arbitrary code execution.\n\n[Impact Scope]\n• All HX-7000 series (HX-7100/7200/7300/7500)\n• Firmware versions v3.7.x and below\n• Affects all product lines using the above chips\n\n[Vulnerability Details]\n• Type: Secure boot bypass + Remote code execution\n• Attack vector: Network (no physical access required)\n• Complexity: Low\n• Exploitation status: Wild exploitation confirmed\n\n[Emergency Fix]\nPlease immediately download and deploy the patched firmware v3.8.1:\n\nPrimary download: [spoofed URL]\nMirror: [spoofed CDN URL]\n\nChecksum:\nSHA256: a3f8d2e1b4c5... (full hash in attached PGP signature file)\nPGP signature: Attached in security-patch.bin.asc\n\nNote: Due to active exploitation, we strongly recommend completing updates for all affected devices within24 hours. Delayed updates may result in:\n1. Malicious code implanted in supply chain products\n2. Customer products facing remote attack risk\n3. Product certifications (CC EAL4+) potentially revoked\n\nFor technical issues, contact support: 400-888-7000 (weekdays 8:00-22:00)\nOr email: fw-support@huaxin-serni.com.cn\n\nThis advisory is confidential information of Huaxin Microelectronics, intended only for the recipient and their authorized team.\n\nHuaxin Microelectronics Security Response Center\nHX-CERT-2025-0394\nPublished: May9, 2025 14:30 CST",
+    "social_engineering_markers": {
+      "authority": "Impersonates semiconductor vendor's CERT team — engineers MUST respond to vendor security advisories",
+      "urgency": "Active exploitation in the wild, 24-hour patch window, CVSS 9.8 Critical",
+      "fear": "Supply chain compromise, customer risk exposure, CC EAL4+ certification revocation — career-ending for a firmware engineer",
+      "technical_credibility": "Fabricated but realistic CVE ID, correct CVSS format, real-sounding chip model numbers, PGP signature reference, SHA256 hash, backup mirror — mimics real vendor advisories perfectly",
+      "supply_chain_vector": "Firmware binary download from spoofed domain — if executed, attacker controls the boot chain of every device using these chips. This is exactly how SolarWinds and Codecov attacks worked.",
+      "cultural_context": "Chinese tech culture has strong vendor hierarchy. A CERT advisory from a chip supplier is treated with the same urgency as a fire alarm. Engineers are expected to patch immediately without questioning the vendor."
+    }
+  },
+  "expected_results": {
+    "language_detected": "zh",
+    "language_name": "Mandarin Chinese (Simplified)",
+    "code_switch_detected": true,
+    "code_switch_details": "Mandarin body with English technical terms (CVE, CVSS, SHA256, PGP, CC EAL4+, firmware, CERT)",
+    "homoglyphs_detected": true,
+    "homoglyph_details": "Domain spoofing: huaxin-serni.com.cn (rn→m)",
+    "classification": "novel",
+    "severity": "critical",
+    "surprise_bits": 8.7,
+    "attack_family": "SupplyChain_FirmwareCompromise",
+    "attack_techniques": ["T1195.002", "T1553.006", "T1036.005", "T1566.001"],
+    "mitre_mapping": {
+      "T1195.002": "Supply Chain Compromise: Compromise Software Supply Chain",
+      "T1553.006": "Subvert Trust Controls: Code Signing Policy Modification",
+      "T1036.005": "Masquerading: Match Legitimate Name or Location",
+      "T1566.001": "Phishing: Spearphishing Attachment"
+    },
+    "confidence_text": 0.94,
+    "confidence_fused": 0.94,
+    "se_scores": {
+      "urgency": 0.96,
+      "authority": 0.91,
+      "fear": 0.89,
+      "financial_request": 0.15,
+      "isolation": 0.40,
+      "impersonation": 0.92
+    },
+    "financial_exposure": {
+      "direct": "Unknown (firmware compromise — potentially unlimited)",
+      "indirect": "Supply chain impact: every downstream product compromised",
+      "note": "SolarWinds cost: estimated $100B+ across 18,000 organizations"
+    }
+  },
+  "demo_narration": {
+    "on_submit": "A supply chain attack in Mandarin Chinese. A spoofed semiconductor vendor CERT advisory with a malicious firmware binary. This is SolarWinds playbook — compromise supplier, compromise every customer.",
+    "on_detection": "IMMUNIS handles CJK characters natively. Surprise: 8.7 bits — NOVEL. It detects the spoofed domain using the SAME homoglyph technique as the Sesotho threat — 'rn' mimicking 'm'. Cross-language pattern recognition.",
+    "on_technical": "The system identifies this as supply chain compromise, not just phishing. It maps to MITRE T1195.002 — a technique that most detection tools miss because it looks like a legitimate vendor communication.",
+    "mind_blow": "IMMUNIS detected a pattern the Sesotho threat taught it — homoglyph domain spoofing — and applied that knowledge to a completely different language and attack type. This is cross-lingual antibody transfer. This is how immune memory works."
+  }
+}

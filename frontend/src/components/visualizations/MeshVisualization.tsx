@@ -76,10 +76,10 @@ export function MeshVisualization({ nodes, className = '' }: MeshVisualizationPr
     // Create visual nodes from mesh nodes
     const existing = visNodesRef.current;
     const newVisNodes: VisNode[] = nodes.map((node, i) => {
-      const existingNode = existing.find((n) => n.id === node.id);
+      const existingNode = existing.find((n) => n.id === node.node_id);
       if (existingNode) {
         existingNode.status = node.status;
-        existingNode.name = node.name || `Node ${i + 1}`;
+        (existingNode as any).label = node.hostname || node.city || `Node ${i + 1}`;
         return existingNode;
       }
 
@@ -87,13 +87,13 @@ export function MeshVisualization({ nodes, className = '' }: MeshVisualizationPr
       const angle = (2 * Math.PI * i) / Math.max(nodes.length, 1) + Math.random() * 0.5;
       const dist = 80 + Math.random() * 60;
       return {
-        id: node.id || `node-${i}`,
+        id: node.node_id || `node-${i}`,
         x: cx + Math.cos(angle) * dist,
         y: cy + Math.sin(angle) * dist,
         vx: (Math.random() - 0.5) * 0.3,
         vy: (Math.random() - 0.5) * 0.3,
         radius: 8 + Math.random() * 4,
-        name: node.name || `Node ${i + 1}`,
+        name: node.hostname || node.city || `Node ${i + 1}`,
         status: node.status,
         pulsePhase: Math.random() * Math.PI * 2,
       };

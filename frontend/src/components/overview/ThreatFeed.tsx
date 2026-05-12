@@ -83,7 +83,7 @@ export function ThreatFeed({
           <AnimatePresence initial={false}>
             {threats.map((threat) => (
               <motion.div
-                key={threat.id}
+                key={threat.incident_id}
                 variants={itemVariants}
                 initial="hidden"
                 animate="visible"
@@ -97,7 +97,7 @@ export function ThreatFeed({
               >
                 {/* Severity dot */}
                 <div className="mt-1.5 flex-shrink-0">
-                  <Badge variant={getSeverityVariant(threat.severity)} dot>
+                  <Badge variant={getSeverityVariant(threat.severity ?? 'Medium')} dot>
                     {threat.severity}
                   </Badge>
                 </div>
@@ -106,9 +106,9 @@ export function ThreatFeed({
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-medium text-[var(--text-primary)] truncate">
-                      {threat.family || threat.type || 'Unknown Threat'}
+                      {threat.attack_family || threat.attack_type || 'Unknown Threat'}
                     </p>
-                    <Badge variant={getClassificationVariant(threat.classification)}>
+                    <Badge variant={getClassificationVariant(threat.classification ?? 'unknown')}>
                       {threat.classification}
                     </Badge>
                   </div>

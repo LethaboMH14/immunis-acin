@@ -1,0 +1,86 @@
+{
+  "timestamp": "2026-05-10T14:52:37.024175+00:00",
+  "duration_seconds": 58.04318642616272,
+  "mode": "offline",
+  "sections": [
+    {
+      "name": "Internal Test Suite",
+      "score": 98.06451612903226,
+      "max_score": 100.0,
+      "tests_run": 155,
+      "tests_passed": 152,
+      "details": {
+        "failed": 3,
+        "skipped": 4
+      },
+      "errors": []
+    },
+    {
+      "name": "Multilingual Detection",
+      "score": 100.0,
+      "max_score": 100.0,
+      "tests_run": 6,
+      "tests_passed": 6,
+      "details": {},
+      "errors": []
+    },
+    {
+      "name": "Adversarial Robustness",
+      "score": 75.0,
+      "max_score": 100.0,
+      "tests_run": 8,
+      "tests_passed": 6,
+      "details": {},
+      "errors": []
+    },
+    {
+      "name": "MITRE ATT&CK Coverage",
+      "score": 75.0,
+      "max_score": 100.0,
+      "tests_run": 4,
+      "tests_passed": 3,
+      "details": {
+        "techniques_mapped": 45,
+        "note": "offline estimate"
+      },
+      "errors": []
+    },
+    {
+      "name": "Real-World Threat Feeds",
+      "score": 100.0,
+      "max_score": 100.0,
+      "tests_run": 4,
+      "tests_passed": 4,
+      "details": {},
+      "errors": []
+    },
+    {
+      "name": "Performance SLAs",
+      "score": 100.0,
+      "max_score": 100.0,
+      "tests_run": 5,
+      "tests_passed": 5,
+      "details": {
+        "surprise_ms": 14.6,
+        "pid_ms": 0.003,
+        "var_ms": 0.0,
+        "sir_ms": 0.0,
+        "sanitise_ms": 0.08
+      },
+      "errors": []
+    },
+    {
+      "name": "Compliance Frameworks",
+      "score": 100.0,
+      "max_score": 100.0,
+      "tests_run": 8,
+      "tests_passed": 8,
+      "details": {
+        "frameworks_total": 8
+      },
+      "errors": []
+    }
+  ],
+  "overall_score": 90.95967741935485,
+  "grade": "A"
+}

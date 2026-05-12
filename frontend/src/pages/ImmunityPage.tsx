@@ -40,8 +40,8 @@ function ImmunityPage() {
       if (statusFilter && ab.status !== statusFilter) return false;
       if (search) {
         const q = search.toLowerCase();
-        const matchId = ab.id?.toLowerCase().includes(q);
-        const matchFamily = (ab.family || ab.type || '').toLowerCase().includes(q);
+        const matchId = ab.antibody_id?.toLowerCase().includes(q);
+        const matchFamily = (ab.attack_family || ab.attack_type || '').toLowerCase().includes(q);
         if (!matchId && !matchFamily) return false;
       }
       return true;
@@ -105,12 +105,12 @@ function ImmunityPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <AnimatePresence>
             {filtered.map((ab, i) => {
-              const strength = typeof ab.strength === 'number' ? ab.strength : 0;
+              const strength = typeof ab.strength_score === 'number' ? ab.strength_score : 0;
               const strengthPct = Math.round(strength * 100);
 
               return (
                 <motion.div
-                  key={ab.id}
+                  key={ab.antibody_id}
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
@@ -126,10 +126,10 @@ function ImmunityPage() {
                     <div className="flex items-start justify-between mb-3">
                       <div>
                         <p className="text-sm font-semibold text-[var(--text-primary)]">
-                          {ab.family || ab.type || 'Unknown'}
+                          {ab.attack_family || ab.attack_type || 'Unknown'}
                         </p>
                         <p className="text-[10px] font-mono text-[var(--text-muted)] mt-0.5">
-                          {ab.id?.slice(0, 16)}
+                          {ab.antibody_id?.slice(0, 16)}
                         </p>
                       </div>
                       <Badge
@@ -160,8 +160,8 @@ function ImmunityPage() {
 
                     {/* Footer */}
                     <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)]">
-                      <span>{formatRelativeTime(ab.created_at || ab.timestamp)}</span>
-                      {ab.verified && (
+                      <span>{ab.synthesised_at ? formatRelativeTime(ab.synthesised_at) : '—'}</span>
+                      {ab.formally_verified && (
                         <Badge variant="immune">Z3 ✓</Badge>
                       )}
                     </div>
@@ -178,7 +178,7 @@ function ImmunityPage() {
         isOpen={!!selectedAntibody}
         onClose={() => setSelectedAntibody(null)}
         title="Antibody Details"
-        subtitle={selectedAntibody?.id}
+        subtitle={selectedAntibody?.antibody_id}
         size="md"
       >
         {selectedAntibody && (
@@ -186,7 +186,7 @@ function ImmunityPage() {
             <div className="space-y-2">
               <p className="text-xs text-[var(--text-muted)]">Family</p>
               <p className="text-sm font-medium text-[var(--text-primary)]">
-                {selectedAntibody.family || selectedAntibody.type}
+                {selectedAntibody.attack_family || selectedAntibody.attack_type}
               </p>
             </div>
             <div className="space-y-2">
@@ -203,7 +203,7 @@ function ImmunityPage() {
             <div className="space-y-2">
               <p className="text-xs text-[var(--text-muted)]">Detection Rule</p>
               <pre className="p-3 rounded-lg bg-[var(--bg-tertiary)] text-xs font-mono text-[var(--text-secondary)] whitespace-pre-wrap overflow-x-auto max-h-48">
-                {selectedAntibody.rule || selectedAntibody.detection_logic || '[Rule data not available]'}
+                {(selectedAntibody.detection_signals_description ?? []).join('\n') || selectedAntibody.cross_lingual_pattern || '[Rule data not available]'}
               </pre>
             </div>
           </div>

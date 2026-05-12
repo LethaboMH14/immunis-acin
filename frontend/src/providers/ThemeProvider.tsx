@@ -26,6 +26,8 @@ interface ThemeContextValue {
   setTheme: (theme: ThemeMode) => void;
   /** Cycle to next theme */
   cycleTheme: () => void;
+  /** Toggle theme */
+  toggleTheme: () => void;
   /** Current density mode */
   density: DensityMode;
   /** Switch density */
@@ -161,6 +163,13 @@ export function ThemeProvider({
     });
   }, []);
 
+  const toggleTheme = useCallback(() => {
+    const themes: ThemeMode[] = ['midnight', 'twilight', 'overcast'];
+    const currentIndex = themes.indexOf(theme);
+    const nextIndex = (currentIndex + 1) % themes.length;
+    setTheme(themes[nextIndex]);
+  }, [theme, setTheme]);
+
   const setDensity = useCallback((d: DensityMode) => {
     setDensityState(d);
   }, []);
@@ -169,7 +178,7 @@ export function ThemeProvider({
 
   return (
     <ThemeContext.Provider
-      value={{ theme, setTheme, cycleTheme, density, setDensity, isDark }}
+      value={{ theme, setTheme, cycleTheme, toggleTheme, density, setDensity, isDark }}
     >
       {children}
     </ThemeContext.Provider>

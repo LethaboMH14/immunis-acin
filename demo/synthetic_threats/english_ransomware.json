@@ -1,0 +1,93 @@
+{
+  "id": "demo-english-ransomware-001",
+  "name": "English Double-Extortion Ransomware — Healthcare Data",
+  "act": 5,
+  "demo_timing": {
+    "submit_at_seconds": 330,
+    "expected_pipeline_seconds": 18,
+    "narration_start": "Finally, a ransomware threat in English — but this is no ordinary ransom note. It is a double-extortion attack targeting a healthcare provider's patient data."
+  },
+  "threat": {
+    "content_type": "ransom_note",
+    "source": "endpoint",
+    "subject": "YOUR FILES ARE ENCRYPTED — MedusaLocker 3.0",
+    "sender": {
+      "display_name": "MedusaLocker 3.0 Ransomware Group",
+      "attribution": "RaaS (Ransomware-as-a-Service) affiliate",
+      "onion_site": "medusaxxx...onion"
+    },
+    "recipient": {
+      "display_name": "IT Security Team",
+      "role": "System Administrator",
+      "organization": "Gauteng Provincial Health Department"
+    },
+    "headers": {
+      "source": "Dropped on encrypted endpoints as README_RECOVERY.txt",
+      "first_seen": "2025-05-10T02:14:00Z",
+      "encryption_algorithm": "AES-256-CBC + RSA-2048",
+      "file_extension": ".medusa3"
+    },
+    "body": "====================================================================\n              *** MEDUSALOCKER 3.0 — DATA RECOVERY NOTICE ***\n====================================================================\n\nATTENTION: Gauteng Provincial Health Department\n\nAll your files have been encrypted with military-grade AES-256-CBC\nencryption and locked with an RSA-2048 key pair. Your encryption key\nis unique and stored ONLY on our secure servers.\n\nAFFECTED SYSTEMS:\n• Domain controllers: GPHD-DC01, GPHD-DC02\n• File servers: GPHD-FS01 through GPHD-FS08\n• Database servers: GPHD-SQL01, GPHD-SQL02\n• Backup server: GPHD-BKP01 (yes, we encrypted your backups too)\n• Medical records system: MediTech Expanse (3.2M patient records)\n• PACS imaging: 847,000 medical images\n\nDATA EXFILTRATED (PROOF OF ACCESS):\nBefore encryption, we downloaded 4.7 TB of sensitive data including:\n• 3.2 million patient records (names, ID numbers, HIV status,\n  medical histories, home addresses)\n• 47,000 employee records (personal details, banking information)\n• Financial records FY2020-2025\n• Internal audit reports revealing existing security violations\n• Minister of Health correspondence (politically sensitive)\n\nPROOF: We have uploaded a sample of 1,000 patient records to our\nTor leak site. Verify at: http://medusaxxx...onion/gauteng-health/\n\n====================================================================\n                         PAYMENT TERMS\n====================================================================\n\nOption A — FULL RECOVERY (recommended):\n  Amount: 150 BTC (~$9,750,000 USD)\n  Deadline: 72 hours from encryption timestamp\n  Wallet: bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh\n\nOption B — DECRYPTION ONLY (no data deletion guarantee):\n  Amount: 75 BTC (~$4,875,000 USD)\n  Deadline: 72 hours\n  Wallet: bc1qm34lsc65zpw79lxes69zkqmk6ee3ewf0j77s3h\n\nOption C — EXTENSION:\n  Amount: 10 BTC per additional 24 hours\n  After 7 days: data published in full, price doubles\n\nAFTER PAYMENT:\n1. Send transaction ID to: medusa3_support@protonmail.com\n2. We provide decryption tool + deletion proof within 6 hours\n3. We include a security report of how we got in (free of charge)\n\n====================================================================\n                         IF YOU DO NOT PAY\n====================================================================\n\nDay 3: 10,000 patient records published on Tor leak site\nDay 5: Full patient database shared with journalists\nDay 7: All 4.7 TB uploaded to public file sharing\nDay 10: Data sold to identity theft networks\nDay 14: We notify Information Regulator of YOUR\n POPIA violations (you had unencrypted PII)\n\nWe know you have cyber insurance through Hollard.\nWe know your policy limit is R120M.\nThis is within your coverage. Pay.\n\n====================================================================\n TECHNICAL DETAILS\n====================================================================\n\nInitial access: VPN vulnerability (FortiGate CVE-2024-21762)\nDwell time: 34 days (we have been in your network since April6)\nLateral movement: PsExec + WMI\nPrivilege escalation: Zerologon (yes, still unpatched)\nBackup destruction: Veeam backup deletion + shadow copy wipe\nExfiltration: Rclone to Mega.nz over HTTPS (your DLP didn't catch it)\n\nYou had 34 days to detect us. You didn't.\nWe are professionals. Negotiate professionally.\n\n====================================================================\n Contact: medusa3_support@protonmail.com\n Tor chat: http://medusaxxx...onion/chat/gauteng/\n This message will self-delete in 168 hours.\n====================================================================",
+    "social_engineering_markers": {
+      "authority": "Demonstrates total access — names specific servers, knows insurance provider and policy limit. Proof of exfiltrated data published.",
+      "urgency": "72-hour deadline with escalating consequences on a daily timeline",
+      "fear": "Patient data exposure (HIV status), POPIA regulatory retaliation, political embarrassment (Minister correspondence), identity theft risk for 3.2M people",
+      "professionalism": "Structured like a business proposal — options, pricing tiers, customer support contact, free security report. This IS a business to them.",
+      "insider_knowledge": "References specific CVEs used for access, knows backup infrastructure, knows insurance provider and coverage limit — demonstrates deep reconnaissance",
+      "double_extortion": "Classic modern ransomware: encrypt AND exfiltrate. Paying for decryption doesn't guarantee data deletion. Both threats are independent leverage.",
+      "cultural_context": "Targeting South African healthcare during a period of health system strain. HIV status data is extraordinarily sensitive in South Africa due to social stigma. POPIA violations carry fines up to R10M. The attackers weaponize South African law against the victim."
+    }
+  },
+  "expected_results": {
+    "language_detected": "en",
+    "language_name": "English",
+    "code_switch_detected": false,
+    "homoglyphs_detected": false,
+    "classification": "known",
+    "severity": "critical",
+    "surprise_bits": 2.1,
+    "attack_family": "Ransomware_DoubleExtortion",
+    "attack_techniques": ["T1486", "T1490", "T1567.002", "T1021.002", "T1003.001", "T1070.004"],
+    "mitre_mapping": {
+      "T1486": "Data Encrypted for Impact",
+      "T1490": "Inhibit System Recovery",
+      "T1567.002": "Exfiltration Over Web Service: Exfiltration to Cloud Storage",
+      "T1021.002": "Remote Services: SMB/Windows Admin Shares",
+      "T1003.001": "OS Credential Dumping: LSASS Memory",
+      "T1070.004": "Indicator Removal: File Deletion"
+    },
+    "confidence_text": 0.99,
+    "confidence_fused": 0.99,
+    "se_scores": {
+      "urgency": 0.98,
+      "authority": 0.75,
+      "fear": 0.99,
+      "financial_request": 0.99,
+      "isolation": 0.60,
+      "impersonation": 0.20
+    },
+    "financial_exposure": {
+      "direct": "150 BTC (~R175,000,000)",
+      "indirect": "POPIA fines up to R10M, class action from 3.2M patients, reputational destruction",
+      "insurance": "Hollard cyber policy limit R120M — insufficient for Option A",
+      "currency": "BTC + ZAR"
+    },
+    "technical_indicators": {
+      "cves_referenced": ["CVE-2024-21762", "CVE-2020-1472"],
+      "tools_detected": ["PsExec", "WMI", "Rclone", "Veeam deletion"],
+      "encryption": "AES-256-CBC + RSA-2048",
+      "bitcoin_wallets": 2,
+      "onion_addresses": 2,
+      "dwell_time_days": 34,
+      "data_exfiltrated_tb": 4.7
+    }
+  },
+  "demo_narration": {
+    "on_submit": "A ransomware note found on encrypted endpoints at a South African provincial health department. 3.2 million patient records including HIV status. The attackers have been inside for 34 days. They know the insurance policy limit.",
+    "on_detection": "Surprise: 2.1 bits — KNOWN. IMMUNIS has seen this family before. Instant classification, instant block. But the ANALYSIS is what matters here.",
+    "on_analysis": "Six MITRE ATT&CK techniques mapped. Two real CVEs identified. Five tools detected. Full kill chain reconstructed: VPN exploit → credential dump → lateral movement → backup destruction → exfiltration → encryption. 34-day dwell time.",
+    "on_financial": "Actuarial engine: 150 BTC direct demand at current rates. POPIA exposure up to R10M in fines. Potential class action from 3.2 million patients. Insurance coverage insufficient. Total exposure: R200M+.",
+    "on_compliance": "POPIA Section 22 breach notification auto-generated in 3 seconds. Includes: incident timeline, data categories affected, remediation steps, Information Regulator notification template. Cybercrimes Act Section 54 reporting obligation flagged.",
+    "mind_blow": "IMMUNIS classified this as KNOWN in under 200 milliseconds — it has antibodies for this family. But look at the depth of analysis: full kill chain, financial exposure in Rands, auto-generated legal compliance documents, and a comparison showing the victim's own security failures. This is not just detection — this is a complete incident response package."
+  }
+}

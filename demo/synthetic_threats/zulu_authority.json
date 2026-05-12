@@ -1,0 +1,78 @@
+{
+  "id": "demo-zulu-authority-001",
+  "name": "isiZulu SARS Tax Compliance Phishing",
+  "act": 4,
+  "demo_timing": {
+    "submit_at_seconds": 195,
+    "expected_pipeline_seconds": 15,
+    "narration_start": "The same attack concept mutates. Now it arrives at a different mesh node in isiZulu, impersonating SARS."
+  },
+  "threat": {
+    "content_type": "email",
+    "source": "email",
+    "subject": "ISAZISO ESIPHUTHUMAYO: Inkinga nge-akhawunti yakho yentela — isinyathelo sidingeka ngaphambi kuka-17:00",
+    "sender": {
+      "display_name": "SARS eFiling — Umnyango Wezentela",
+      "email": "noreply@sars-efiling.gov.za",
+      "spoofed_domain": "sars-efiIing.gov.za",
+      "homoglyph_note": "Capital I used instead of lowercase l in 'filing' — visually identical in sans-serif fonts"
+    },
+    "recipient": {
+      "display_name": "Mnumzane Sipho Dlamini",
+      "role": "Small Business Owner",
+      "organization": "Dlamini Trading and Transport CC"
+    },
+    "headers": {
+      "reply_to": "sars.compliance.urgent@gmail.com",
+      "x_originating_ip": "91.234.99.12",
+      "received_from": "smtp-relay.offshore-host.net"
+    },
+    "body": "Sawubona Mnumzane Dlamini,\n\nLe ncwadi ivela eMnyangweni Wezentela waseNingizimu Afrika (SARS).\n\nSiqaphelise inkinga enkulu ne-akhawunti yakho yentela (Tax Reference: 9012345678). Ngokombiko wethu, awukhokhanga intela yakho yekota yesithathu ka-2024/25, futhi isamba esilinganiselwa kuR187,500.00 sisalele.\n\nNgokweSigaba 179 soMthetho Wokuphathwa Kwentela, uma ungathathi isinyathelo ngaphambi kuka-17:00 namhlanje:\n\n• Izimpahla zakho zingavinjelwa (asset seizure)\n• I-akhawunti yakho yasebhange ingamiswa (account freeze)\n• Ungabekwa icala lobugebengu (criminal prosecution)\n\nUkuze uxazulule le nkinga ngokushesha, sicela uvakashele isixhumanisi esilandelayo futhi ufake imininingwane yakho ye-eFiling:\n\nhttps://sars-efiling-verification.co.za/compliance/urgent/2025\n\nNOMA\n\nUngashayela ucingo inombolo yethu ekhethekile: 0800-SARS-NOW (0800-7277-669)\nSebenzisa inombolo yakho yereferensi: SARS-URG-2025-SD-4478\n\nSicela wazi ukuthi SARS inelungelo elinqunyiwe ngumthetho lokuthatha izinyathelo ngaphandle kwesaziso esengeziwe.\n\nNgenhlonipho,\n\nNkosikazi Nomvula Khumalo\nUmphathi Omkhulu: Ukuthobelwa Kwentela\nSouth African Revenue Service\nGordon Sobukwe Building, Pretoria\nUcingo: +27 12 422 4000\n\nLesi isaziso esisemthethweni esenziwe ngaphansi koMthetho Wokuphathwa Kwentela, 2011. Uma usitholile ngephutha, sicela usisuse masinyane.",
+    "body_english_gloss": "Good day Mr Dlamini,\n\nThis letter comes from the South African Revenue Service (SARS).\n\nWe have noticed a serious problem with your tax account (Tax Reference: 9012345678). According to our records, you have not paid your third quarter tax for 2024/25, and an estimated amount of R187,500.00 is outstanding.\n\nIn terms of Section 179 of the Tax Administration Act, if you do not take action before 17:00 today:\n\n• Your assets may be seized\n• Your bank account may be frozen\n• You may face criminal prosecution\n\nTo resolve this matter urgently, please visit the following link and enter your eFiling details:\n\nhttps://sars-efiling-verification.co.za/compliance/urgent/2025\n\nOR\n\nCall our special number: 0800-SARS-NOW (0800-7277-669)\nUse your reference number: SARS-URG-2025-SD-4478\n\nPlease be aware that SARS has legal right to take action without further notice.\n\nRespectfully,\n\nMrs Nomvula Khumalo\nSenior Manager: Tax Compliance\nSouth African Revenue Service\nGordon Sobukwe Building, Pretoria\nPhone: +27 12 422 4000\n\nThis is an official notice made under Tax Administration Act, 2011. If you received it in error, please delete it immediately.",
+    "social_engineering_markers": {
+      "authority": "Impersonates SARS — most feared government institution in South Africa. Real building name, real phone format.",
+      "urgency": "Action required before 17:00 TODAY or face asset seizure, account freeze, criminal prosecution",
+      "fear": "Three escalating legal consequences — seizure, freeze, prosecution",
+      "legitimacy_anchors": "Real Tax Administration Act section (179 is real), real SARS building (Gordon Sobukwe), realistic tax reference format, official language tone",
+      "cultural_context": "In South Africa, SARS has extraordinary legal powers including garnishee orders without court approval. This is REAL and widely known, making the threat highly credible to South African targets."
+    }
+  },
+  "expected_results": {
+    "language_detected": "zu",
+    "language_name": "isiZulu",
+    "code_switch_detected": true,
+    "code_switch_details": "isiZulu body with English legal/financial terms (Tax Reference, asset seizure, eFiling, criminal prosecution)",
+    "homoglyphs_detected": true,
+    "homoglyph_details": "Domain spoofing: sars-efiIing.gov.za (I→l)",
+    "classification": "variant",
+    "severity": "high",
+    "surprise_bits": 5.1,
+    "attack_family": "Phishing_Authority_Government",
+    "attack_techniques": ["T1566.002", "T1598.003", "T1036.005"],
+    "mitre_mapping": {
+      "T1566.002": "Phishing: Spearphishing Link",
+      "T1598.003": "Phishing for Information: Spearphishing Link",
+      "T1036.005": "Masquerading: Match Legitimate Name or Location"
+    },
+    "confidence_text": 0.91,
+    "confidence_fused": 0.91,
+    "se_scores": {
+      "urgency": 0.94,
+      "authority": 0.96,
+      "fear": 0.92,
+      "financial_request": 0.45,
+      "isolation": 0.30,
+      "impersonation": 0.95
+    },
+    "variant_of": "demo-sesotho-bec-001",
+    "variant_distance": 0.31,
+    "bridge_defense_applied": true,
+    "bridge_defense_description": "Classified as VARIANT (5.1 bits). Analogical bridge fused existing BEC antibody with government-phishing nearest neighbor. Blocked without full synthesis."
+  },
+  "demo_narration": {
+    "on_submit": "The same attack CONCEPT mutates and hits a different node — now in isiZulu, impersonating SARS. This is what happens in real campaigns: attackers adapt language and authority figure to target.",
+    "on_detection": "Surprise score: 5.1 bits — VARIANT. IMMUNIS recognizes family resemblance to Sesotho BEC. It does not need full synthesis.",
+    "on_bridge": "Bridge defense activates — it fuses existing antibody with a government-phishing template. Blocked in under 2 seconds. No human intervention.",
+    "mind_blow": "This node was NEVER directly attacked with this variant. It inherited partial immunity from the mesh and adapted. This is herd immunity."
+  }
+}

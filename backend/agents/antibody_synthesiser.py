@@ -104,7 +104,7 @@ CRITICAL RULES:
 
 async def synthesise_antibody(
     fingerprint: SemanticFingerprint,
-) -> Antibody:
+) -> Optional[Antibody]:
     """
     Synthesise an antibody from a semantic fingerprint.
 
@@ -150,7 +150,7 @@ async def synthesise_antibody(
             antibody = _build_antibody(result["parsed"], fingerprint)
 
             # Formal verification
-            verification = _formal_verify(antibody)
+            verification = await _formal_verify(antibody)
             antibody.formally_verified = verification.get("sound", False)
             antibody.verification_result = verification
 
@@ -220,7 +220,7 @@ async def synthesise_antibody(
 # FORMAL VERIFICATION — Z3 Theorem Prover
 # ============================================================================
 
-def _formal_verify(antibody: Antibody) -> dict[str, Any]:
+async def _formal_verify(antibody: Antibody) -> dict[str, Any]:
     """
     Formally verify that the antibody's detection logic is:
     1. SOUND: The detection signals are not contradictory
@@ -268,13 +268,13 @@ def _formal_verify(antibody: Antibody) -> dict[str, Any]:
         # Verification 1: CONSISTENCY — Can all signals be true simultaneously?
         solver.push()
         solver.add(detection)
-        consistency = solver.check() == sat
+        consistency = (await asyncio.to_thread(solver.check)) == sat
         solver.pop()
 
         # Verification 2: NON-TRIVIALITY — Does there exist input that is NOT detected?
         solver.push()
         solver.add(Not(detection))
-        non_trivial = solver.check() == sat
+        non_trivial = (await asyncio.to_thread(solver.check)) == sat
         solver.pop()
 
         # Sound = consistent AND non-trivial

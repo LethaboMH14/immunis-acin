@@ -26,9 +26,10 @@ export type ConnectionStatus =
   | 'error';
 
 export interface WSMessage {
-  type: string;
-  data: Record<string, unknown>;
+  event_type: string;
+  payload: Record<string, unknown>;
   timestamp: string;
+  pipeline_id?: string;
 }
 
 type EventCallback = (data: Record<string, unknown>) => void;
@@ -122,15 +123,15 @@ export function WebSocketProvider({
   // -----------------------------------------------------------------------
 
   const dispatch = useCallback((msg: WSMessage) => {
-    // Notify type-specific subscribers
-    const typeSubs = subscribersRef.current.get(msg.type);
+    // Notify event_type-specific subscribers
+    const typeSubs = subscribersRef.current.get(msg.event_type);
     if (typeSubs) {
       typeSubs.forEach((cb) => {
         try {
-          cb(msg.data);
+          cb(msg.payload);
         } catch (err) {
           console.error(
-            `[WS] Subscriber error for event "${msg.type}":`,
+            `[WS] Subscriber error for event "${msg.event_type}":`,
             err
           );
         }
@@ -142,7 +143,7 @@ export function WebSocketProvider({
     if (wildcardSubs) {
       wildcardSubs.forEach((cb) => {
         try {
-          cb({ type: msg.type, ...msg.data });
+          cb({ event_type: msg.event_type, ...msg.payload });
         } catch (err) {
           console.error('[WS] Wildcard subscriber error:', err);
         }
@@ -174,88 +175,78 @@ export function WebSocketProvider({
   // Connection
   // -----------------------------------------------------------------------
 
+  const connectRef = useRef<(() => void) | null>(null);
+  
   const connect = useCallback(() => {
     if (disabled || !mountedRef.current) return;
 
     // Clean up existing connection
     if (wsRef.current) {
-      wsRef.current.onopen = null;
-      wsRef.current.onclose = null;
-      wsRef.current.onerror = null;
-      wsRef.current.onmessage = null;
-      if (
-        wsRef.current.readyState === WebSocket.OPEN ||
-        wsRef.current.readyState === WebSocket.CONNECTING
-      ) {
-        wsRef.current.close();
-      }
+      wsRef.current.close();
+      wsRef.current = null;
     }
 
+    console.log('[WS] Attempting connection to', url);
     setStatus('connecting');
+    const ws = new WebSocket(url);
+    wsRef.current = ws;
 
-    try {
-      const ws = new WebSocket(url);
-      wsRef.current = ws;
+    ws.onopen = () => {
+      if (!mountedRef.current) return;
+      setStatus('connected');
+      retriesRef.current = 0;
+      retryDelayRef.current = INITIAL_RETRY_DELAY;
+      startHeartbeat();
+      console.log('[WS] CONNECTED');
+    };
 
-      ws.onopen = () => {
-        if (!mountedRef.current) return;
-        setStatus('connected');
-        retriesRef.current = 0;
-        retryDelayRef.current = INITIAL_RETRY_DELAY;
-        startHeartbeat();
-        console.log('[WS] Connected to', url);
-      };
+    ws.onmessage = (event: MessageEvent) => {
+      if (!mountedRef.current) return;
+      try {
+        const msg = JSON.parse(event.data as string) as WSMessage;
+        // Skip pong/ping responses
+        if (msg.event_type === 'pong' || msg.event_type === 'ping') return;
 
-      ws.onmessage = (event: MessageEvent) => {
-        if (!mountedRef.current) return;
-        try {
-          const msg = JSON.parse(event.data as string) as WSMessage;
-          // Skip pong responses
-          if (msg.type === 'pong') return;
+        setLastMessage(msg);
+        setMessageCount((c) => c + 1);
+        dispatch(msg);
+      } catch (err) {
+        console.error('[WS] Failed to parse message:', err);
+      }
+    };
 
-          setLastMessage(msg);
-          setMessageCount((c) => c + 1);
-          dispatch(msg);
-        } catch (err) {
-          console.error('[WS] Failed to parse message:', err);
+    ws.onclose = (event: CloseEvent) => {
+      if (!mountedRef.current) return;
+      stopHeartbeat();
+      setStatus('disconnected');
+      console.log('[WS] DISCONNECTED', event.code, event.reason);
+
+      // Auto-reconnect unless intentionally closed
+      if (event.code !== 1000 && retriesRef.current < MAX_RETRIES) {
+        const delay = Math.min(retryDelayRef.current, MAX_RETRY_DELAY);
+        const attempt = retriesRef.current + 1;
+        // Suppress console.log after attempt 3
+        if (attempt <= 3) {
+          console.log(
+            `[WS] Reconnecting in ${delay}ms (attempt ${attempt}/${MAX_RETRIES})`
+          );
         }
-      };
+        retryTimerRef.current = setTimeout(() => {
+          retriesRef.current += 1;
+          retryDelayRef.current *= 2;
+          connectRef.current?.();
+        }, delay);
+      }
+    };
 
-      ws.onclose = (event: CloseEvent) => {
-        if (!mountedRef.current) return;
-        stopHeartbeat();
-        setStatus('disconnected');
-        console.log(
-          `[WS] Disconnected (code: ${event.code}, reason: ${event.reason})`
-        );
-
-        // Auto-reconnect unless intentionally closed
-        if (event.code !== 1000 && retriesRef.current < MAX_RETRIES) {
-          const delay = Math.min(retryDelayRef.current, MAX_RETRY_DELAY);
-          const attempt = retriesRef.current + 1;
-          // Suppress console.log after attempt 3
-          if (attempt <= 3) {
-            console.log(
-              `[WS] Reconnecting in ${delay}ms (attempt ${attempt}/${MAX_RETRIES})`
-            );
-          }
-          retryTimerRef.current = setTimeout(() => {
-            retriesRef.current += 1;
-            retryDelayRef.current *= 2;
-            connect();
-          }, delay);
-        }
-      };
-
-      ws.onerror = () => {
-        if (!mountedRef.current) return;
-        setStatus('error');
-      };
-    } catch (err) {
-      console.error('[WS] Connection error:', err);
+    ws.onerror = (e) => {
+      console.error('[WS] ERROR', e);
+      if (!mountedRef.current) return;
       setStatus('error');
-    }
+    };
   }, [url, disabled, dispatch, startHeartbeat, stopHeartbeat]);
+  
+  connectRef.current = connect;
 
   // -----------------------------------------------------------------------
   // Send message
@@ -280,8 +271,8 @@ export function WebSocketProvider({
       clearTimeout(retryTimerRef.current);
       retryTimerRef.current = null;
     }
-    connect();
-  }, [connect]);
+    connectRef.current?.();
+  }, []);
 
   // -----------------------------------------------------------------------
   // Lifecycle
@@ -289,7 +280,7 @@ export function WebSocketProvider({
 
   useEffect(() => {
     mountedRef.current = true;
-    connect();
+    connectRef.current?.();
 
     return () => {
       mountedRef.current = false;
@@ -305,7 +296,7 @@ export function WebSocketProvider({
         wsRef.current.close(1000, 'Component unmounted');
       }
     };
-  }, [connect, stopHeartbeat]);
+  }, [stopHeartbeat]);
 
   return (
     <WebSocketContext.Provider

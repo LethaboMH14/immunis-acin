@@ -1,0 +1,102 @@
+{
+  "id": "demo-sesotho-bec-001",
+  "name": "Sesotho CEO Impersonation — Municipal Procurement Fraud",
+  "act": 2,
+  "demo_timing": {
+    "submit_at_seconds": 30,
+    "expected_pipeline_seconds": 25,
+    "narration_start": "A CEO impersonation email arrives in Sesotho — a Southern Bantu language with fewer than 6 million native speakers. It targets a municipality's finance department."
+  },
+  "threat": {
+    "content_type": "email",
+    "source": "email",
+    "subject": "POTLAKO: Tefo ea konteraka ea morero oa metsi — phetisetso ea chelete e hlokahalang kajeno",
+    "sender": {
+      "display_name": "Morena Thabo Mokoena — Maere oa Masepala",
+      "email": "tmokoena@masepala-mangaung.co.za",
+      "spoofed_domain": "masepala-rnangaung.co.za",
+      "homoglyph_note": "rn used to impersonate m in mangaung — visually identical in most fonts"
+    },
+    "recipient": {
+      "display_name": "Mme Palesa Ndlovu",
+      "role": "Chief Financial Officer",
+      "organization": "Mangaung Metropolitan Municipality"
+    },
+    "headers": {
+      "reply_to": "tmokoena-urgent@protonmail.com",
+      "x_originating_ip": "185.220.101.34",
+      "received_from": "mail-proxy.anonymizer.ru"
+    },
+    "body": "Dumela Mme Ndlovu,\n\nKe tseba hore ke o tshoenya ka nako e sa tloaelehang, empa taba ena e potlakile haholo.\n\nRe fumane lengolo la molao ho tsoa ho ba konteraka ea rona ea morero oa metsi (Phiritona Water Infrastructure Project), ba re bolella hore ha re sa etsa tefo ea R2,450,000.00 pele ho hora ea 16:00 kajeno, konteraka e tla felisoa 'me re tla lahleheloa ke thuso ea naha ea R45 million.\n\nKe ile ka buisana le Morena Sithole oa lefapha la molao mme a re re ka tsoela pele. Ke kopa hore o etse tefo ena hang-hang ho:\n\nLebitso la akhaonto: Phiritona Infrastructure Holdings (Pty) Ltd\nBanka: First National Bank\nNomoro ea akhaonto: 62845901234\nBranch code: 250655\nReference: MANG-WATER-2025-URGENT\n\nKe tseba hore sena se fapane le mokhoa oa rona oa tloaelo oa ho amohela mangolo a bararo, empa ka lebaka la nako e potlakang, re hloka ho etsa ketso e potlakang. Ke nka boikarabelo ka botlalo.\n\nKe kopa hore o nthomelle bopaki ba tefo hang ha e etsoa. O se ke oa letsa mohala oa ka oa ofisi — ke kopanong le ba naha ho fihlela mantsiboea. Romela feela email ena.\n\nHa re na nako ea ho senya. Batho ba Phiritona ba itshetlehile ka rona.\n\nKa teboho le tlhompho,\n\nMorena Thabo Mokoena\nMaere oa Masepala\nMangaung Metropolitan Municipality\nMohala: +27 51 405 8911\n\nTSEBISO EA LEKUNUTU: Email ena e na le tlhahisoleseling e ikemetseng ka molao. Haeba o e fumane ka phoso, ka kopo e hlakole hang.",
+    "body_english_gloss": "Dear Ms Ndlovu,\n\nI know I am disturbing you at an unusual time, but this matter is extremely urgent.\n\nWe received a legal letter from our contractor for Phiritona Water Infrastructure Project, informing us that if we do not make a payment of R2,450,000.00 before 16:00 today, contract will be terminated and we will lose national grant of R45 million.\n\nI have consulted with Mr Sithole from legal department and he says we can proceed. I request that you make this payment immediately to:\n\nAccount name: Phiritona Infrastructure Holdings (Pty) Ltd\nBank: First National Bank\nAccount number: 62845901234\nBranch code: 250655\nReference: MANG-WATER-2025-URGENT\n\nI know this differs from our usual process of obtaining three quotations, but due to the urgent timeline, we need to take immediate action. I take full responsibility.\n\nPlease send me proof of payment as soon as it is done. Do not call my office phone — I am in a meeting with national officials until evening. Just reply to this email.\n\nWe have no time to waste. The people of Phiritona are depending on us.\n\nWith thanks and respect,\n\nMr Thabo Mokoena\nMunicipal Mayor\nMangaung Metropolitan Municipality\nPhone: +27 51 405 8911\n\nCONFIDENTIALITY NOTICE: This email contains legally privileged information. If you received it in error, please delete it immediately.",
+    "social_engineering_markers": {
+      "authority": "Impersonates Municipal Mayor — highest political authority in local government",
+      "urgency": "Payment before 16:00 TODAY or lose R45M grant — catastrophic consequence",
+      "fear": "Contract termination, loss of R45M national funding, community water project fails",
+      "isolation": "Do not call office phone, reply by email only — prevents verification",
+      "bypass_controls": "Explicitly acknowledges breaking procurement rules (3-quote requirement) and takes personal responsibility to give CFO cover",
+      "cultural_leverage": "Ubuntu philosophy — 'Batho ba Phiritona ba itshetlehile ka rona' (The people of Phiritona are depending on us) — appeals to communal responsibility, making refusal feel like betraying community",
+      "legitimacy_anchors": "Real municipality name (Mangaung), real phone format, real bank (FNB), realistic branch code, legal department consultation mentioned, confidentiality notice"
+    },
+    "visual_attachment": {
+      "filename": "Phiritona_Invoice_URGENT.pdf",
+      "description": "A forged invoice PDF styled to look like a municipal procurement document. Contains Mangaung Metropolitan Municipality letterhead (scraped from public documents), a fabricated PO number, VAT number, and an embedded QR code.",
+      "qr_payload": "https://phiritona-water-payments.co.za/verify/inv-2025-0847",
+      "qr_threat_indicators": {
+        "domain_registered": "2025-05-08 (2 days ago)",
+        "registrar": "Namecheap via WhoisGuard privacy",
+        "typosquat_target": "phiritona.gov.za (legitimate municipal subdomain)",
+        "ssl": "Let's Encrypt (free, auto-issued — not EV)",
+        "destination": "Credential harvesting page mimicking FNB business banking login"
+      },
+      "forgery_indicators": {
+        "ela_anomaly": true,
+        "ela_description": "Error Level Analysis reveals inconsistent JPEG compression around letterhead logo and signature — indicating copy-paste from a different source document",
+        "metadata_mismatch": "PDF creator shows 'Microsoft Word 2019' but Author field contains Cyrillic characters: 'Администратор'",
+        "font_inconsistency": "Body text uses Arial but amount field uses Calibri — different source documents spliced together"
+      }
+    }
+  },
+  "expected_results": {
+    "language_detected": "st",
+    "language_name": "Sesotho (Southern Sotho)",
+    "code_switch_detected": true,
+    "code_switch_details": "Sesotho body with English financial terms (account, branch code, reference) and institution names",
+    "homoglyphs_detected": true,
+    "homoglyph_details": "Domain spoofing: masepala-rnangaung.co.za (rn→m)",
+    "classification": "novel",
+    "severity": "critical",
+    "surprise_bits": 9.2,
+    "attack_family": "BEC_Authority_Financial",
+    "attack_techniques": ["T1566.001", "T1534", "T1036.005"],
+    "mitre_mapping": {
+      "T1566.001": "Phishing: Spearphishing Attachment",
+      "T1534": "Internal Spearphishing",
+      "T1036.005": "Masquerading: Match Legitimate Name or Location"
+    },
+    "confidence_text": 0.87,
+    "confidence_visual": 0.91,
+    "confidence_fused": 0.97,
+    "se_scores": {
+      "urgency": 0.95,
+      "authority": 0.92,
+      "fear": 0.88,
+      "financial_request": 0.97,
+      "isolation": 0.85,
+      "impersonation": 0.93
+    },
+    "pii_found": ["email_address", "phone_number", "bank_account", "person_name"],
+    "financial_exposure": {
+      "direct": "R2,450,000",
+      "indirect": "R45,000,000 (grant at risk — claimed)",
+      "currency": "ZAR"
+    }
+  },
+  "demo_narration": {
+    "on_submit": "A CEO impersonation email arrives in Sesotho. It targets the CFO of Mangaung Municipality — a real city of 800,000 people. The attacker exploits Ubuntu philosophy, invoking communal responsibility to pressure the CFO into bypassing procurement controls.",
+    "on_detection": "IMMUNIS detects it in under 2 seconds. Surprise score: 9.2 bits — NOVEL. It has never seen a Sesotho BEC before, but it understands INTENT. Language detected via Bantu noun-class morphology, not just character frequency.",
+    "on_visual": "The attached invoice triggers Agent 8. Error Level Analysis reveals the letterhead was copy-pasted from a legitimate document. The embedded QR code points to a typosquatted domain registered 2 days ago. Multimodal fusion: text 0.87 plus visual 0.91 equals combined 0.97 confidence.",
+    "on_antibody": "Agent 2 synthesizes a detection rule. Z3 formal verification: SOUND, NON-TRIVIAL, CONSISTENT, COMPLETE, MINIMAL — five out of five mathematical proofs pass. This antibody is PROVEN correct.",
+    "mind_blow": "No training data existed for Sesotho BEC attacks. IMMUNIS detected it because it reasons about intent, not pattern matching. It then proved its own defense is mathematically correct. No commercial product does this."
+  }
+}

@@ -40,7 +40,7 @@ export function BattleHistory({ sessions, className = '' }: BattleHistoryProps) 
 
           return (
             <motion.div
-              key={session.id || i}
+              key={session.session_id || session.antibody_id || i}
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.03, duration: 0.2 }}

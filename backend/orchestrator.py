@@ -327,7 +327,7 @@ class IMMUNISOrchestrator:
             detector = get_surprise_detector()
 
             # Generate threat vector (placeholder — will use LaBSE in production)
-            threat_vector = self._generate_threat_vector(threat)
+            threat_vector = await self._generate_threat_vector(threat)
 
             surprise_result = detector.compute_surprise(threat_vector)
             result.surprise = surprise_result
@@ -504,7 +504,7 @@ class IMMUNISOrchestrator:
             from backend.agents.immune_memory import get_immune_memory
 
             memory = get_immune_memory()
-            threat_vector = self._generate_threat_vector(threat)
+            threat_vector = await self._generate_threat_vector(threat)
 
             search_result = memory.search(threat_vector, top_k=5)
             result.memory_search = search_result
@@ -730,7 +730,7 @@ class IMMUNISOrchestrator:
 
         # ── Store in Immune Memory ──────────────────────────────────────
         try:
-            threat_vector = self._generate_threat_vector_from_fingerprint(result.fingerprint)
+            threat_vector = await self._generate_threat_vector_from_fingerprint(result.fingerprint)
             store_result = memory.store_antibody(result.antibody, threat_vector)
             result.memory_result = store_result
 
@@ -910,14 +910,14 @@ class IMMUNISOrchestrator:
     # HELPER METHODS
     # ====================================================================
 
-    def _generate_threat_vector(self, threat: ThreatInput) -> "np.ndarray":
+    async def _generate_threat_vector(self, threat: ThreatInput) -> "np.ndarray":
         """Generate a semantic vector for a threat using cached LaBSE."""
         import numpy as np
 
         model = _get_labse_model()
         if model is not None:
             try:
-                vector = model.encode(threat.content[:512], convert_to_numpy=True)
+                vector = await asyncio.to_thread(model.encode, threat.content[:512], convert_to_numpy=True)
                 return vector.astype(np.float32)
             except Exception as e:
                 logger.debug(f"LaBSE encoding failed: {e}, using placeholder")
@@ -939,7 +939,7 @@ class IMMUNISOrchestrator:
             vector = vector / norm
         return vector
 
-    def _generate_threat_vector_from_fingerprint(
+    async def _generate_threat_vector_from_fingerprint(
         self,
         fingerprint: Optional[SemanticFingerprint],
     ) -> "np.ndarray":
@@ -956,7 +956,7 @@ class IMMUNISOrchestrator:
         model = _get_labse_model()
         if model is not None:
             try:
-                vector = model.encode(text[:512], convert_to_numpy=True)
+                vector = await asyncio.to_thread(model.encode, text[:512], convert_to_numpy=True)
                 return vector.astype(np.float32)
             except Exception as e:
                 logger.debug(f"LaBSE encoding failed: {e}")

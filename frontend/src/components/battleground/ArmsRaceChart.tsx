@@ -174,8 +174,8 @@ export function ArmsRaceChart({ history, className = '' }: ArmsRaceChartProps) {
                 top: Math.min(hoveredPoint.redY, hoveredPoint.blueY) - 55,
               }}
             >
-              <p className="text-[10px] text-red-400 font-mono">Red: {hoveredPoint.data.data.red}</p>
-              <p className="text-[10px] text-[var(--color-immune)] font-mono">Blue: {hoveredPoint.data.data.blue}</p>
+              <p className="text-[10px] text-red-400 font-mono">Red: {hoveredPoint.data?.red || 0}</p>
+              <p className="text-[10px] text-[var(--color-immune)] font-mono">Blue: {(hoveredPoint.data as any)?.blue || 0}</p>
             </div>
           )}
         </div>

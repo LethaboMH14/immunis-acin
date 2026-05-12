@@ -37,7 +37,7 @@ const itemVariants = {
 // ─── Types ────────────────────────────────────────────────────────────────
 
 interface OverviewPageProps {
-  onNavigate: (route: string) => void;
+  onNavigate?: (route: string) => void;
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -74,7 +74,7 @@ function OverviewPage({ onNavigate }: OverviewPageProps) {
           <ImmunityRing
             score={immunityScore}
             antibodyCount={antibodies.length}
-            threatsBlocked={systemHealth?.threats_processed ?? threats.length}
+            threatsBlocked={threats.length}
           />
         </motion.div>
 
@@ -83,7 +83,7 @@ function OverviewPage({ onNavigate }: OverviewPageProps) {
           <motion.div variants={itemVariants}>
             <MetricCard
               label="Threats Processed"
-              value={systemHealth?.threats_processed ?? threats.length}
+              value={threats.length}
               trend={{ value: threatsToday, direction: threatsToday > 0 ? 'up' : 'neutral', isPositive: false }}
               icon="threats"
             />
@@ -91,7 +91,7 @@ function OverviewPage({ onNavigate }: OverviewPageProps) {
           <motion.div variants={itemVariants}>
             <MetricCard
               label="Antibodies Active"
-              value={systemHealth?.antibodies_active ?? antibodies.length}
+              value={systemHealth?.antibody_count ?? antibodies.length}
               trend={{ value: antibodies.length, direction: 'up', isPositive: true }}
               icon="antibodies"
             />
@@ -130,14 +130,14 @@ function OverviewPage({ onNavigate }: OverviewPageProps) {
         {/* Quick Actions + System Status */}
         <motion.div variants={itemVariants} className="lg:col-span-3 space-y-4">
           <QuickActions
-            onSubmitThreat={() => onNavigate('threats')}
-            onRunScan={() => onNavigate('scanner')}
-            onViewReports={() => onNavigate('compliance')}
-            onOpenCopilot={() => onNavigate('copilot')}
+            onSubmitThreat={() => onNavigate?.('threats')}
+            onRunScan={() => onNavigate?.('scanner')}
+            onViewReports={() => onNavigate?.('compliance')}
+            onOpenCopilot={() => onNavigate?.('copilot')}
           />
           <SystemStatus
             isConnected={isConnected}
-            uptime={systemHealth?.uptime ?? 0}
+            uptime={systemHealth?.uptime_seconds ?? 0}
           />
         </motion.div>
       </div>

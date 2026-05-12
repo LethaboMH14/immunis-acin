@@ -10,3 +10,4 @@ export { useApi, useMutation, useHealthCheck } from './useApi';
 export { useCommandPalette } from './useCommandPalette';
 export type { CommandItem } from './useCommandPalette';
 export { useImmunis } from './useImmunis';
+export { useAuth, AuthProvider } from './useAuth';

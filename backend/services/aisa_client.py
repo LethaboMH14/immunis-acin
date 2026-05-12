@@ -72,6 +72,19 @@ PROVIDER_MODELS = {
         "vision": "immunis-vision",
         "default": "immunis-sentinel",
     },
+    "mulerouter": {
+        "claude_sonnet": "anthropic/claude-sonnet-4",
+        "gpt4o": "openai/gpt-4o",
+        "llama31": "meta-llama/llama-3.1-70b-instruct",
+        "qwen25": "qwen/qwen2.5-7b-instruct",
+        "default": "anthropic/claude-sonnet-4",
+    },
+    "dashscope": {
+        "qwen25": "qwen2.5-7b-instruct",
+        "qwen25_coder": "qwen2.5-coder-7b-instruct",
+        "qwen25_32b": "qwen2.5-32b-instruct",
+        "default": "qwen2.5-7b-instruct",
+    },
 }
 
 
@@ -79,7 +92,7 @@ PROVIDER_MODELS = {
 # CLIENT FACTORY
 # ============================================================================
 
-def _create_client(provider: str) -> Optional[AsyncOpenAI]:
+def _create_client(provider: str, api_key_index: int = 0) -> Optional[AsyncOpenAI]:
     """Create an AsyncOpenAI client for the specified provider."""
     settings = get_settings()
 
@@ -90,11 +103,19 @@ def _create_client(provider: str) -> Optional[AsyncOpenAI]:
             timeout=httpx.Timeout(60.0, connect=10.0),
         )
     elif provider == "groq" and settings.has_groq:
-        return AsyncOpenAI(
-            api_key=settings.groq_api_key,
-            base_url="https://api.groq.com/openai/v1",
-            timeout=httpx.Timeout(30.0, connect=10.0),
-        )
+        # Use multiple API keys with failover
+        if settings.groq_api_keys and api_key_index < len(settings.groq_api_keys):
+            return AsyncOpenAI(
+                api_key=settings.groq_api_keys[api_key_index],
+                base_url="https://api.groq.com/openai/v1",
+                timeout=httpx.Timeout(30.0, connect=10.0),
+            )
+        elif settings.groq_api_key:
+            return AsyncOpenAI(
+                api_key=settings.groq_api_key,
+                base_url="https://api.groq.com/openai/v1",
+                timeout=httpx.Timeout(30.0, connect=10.0),
+            )
     elif provider == "openrouter" and settings.has_openrouter:
         return AsyncOpenAI(
             api_key=settings.openrouter_api_key,
@@ -105,13 +126,25 @@ def _create_client(provider: str) -> Optional[AsyncOpenAI]:
         return AsyncOpenAI(
             api_key="ollama",
             base_url=f"{settings.ollama_base_url}/v1",
-            timeout=httpx.Timeout(600.0, connect=5.0),  # Ollama is slow on CPU — needs 5+ minutes
+            timeout=httpx.Timeout(60.0, connect=5.0),  # Limited to 60s max
         )
     elif provider == "vllm" and settings.has_vllm:
         return AsyncOpenAI(
             api_key="not-needed",
             base_url=settings.vllm_endpoint,
             timeout=httpx.Timeout(30.0, connect=5.0),
+        )
+    elif provider == "mulerouter" and settings.has_mulerouter:
+        return AsyncOpenAI(
+            api_key=settings.mulerouter_api_key,
+            base_url=settings.mulerouter_base_url,
+            timeout=httpx.Timeout(60.0, connect=10.0),
+        )
+    elif provider == "dashscope" and settings.has_dashscope:
+        return AsyncOpenAI(
+            api_key=settings.dashscope_api_key,
+            base_url=settings.dashscope_base_url,
+            timeout=httpx.Timeout(60.0, connect=10.0),
         )
 
     return None
@@ -144,6 +177,60 @@ async def call_ai(
         - response content is NEVER logged
         - Only metadata (latency, tokens, success/failure) is logged
     """
+    settings = get_settings()
+    
+    # For Groq, try multiple API keys with failover
+    if provider == "groq" and settings.groq_api_keys:
+        api_keys = settings.groq_api_keys
+        for key_index, api_key in enumerate(api_keys):
+            client = _create_client(provider, key_index)
+            if client is None:
+                continue
+                
+            result = await _try_client(
+                client=client,
+                provider=provider,
+                model=model,
+                system_prompt=system_prompt,
+                user_content=user_content,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                response_schema=response_schema,
+                retry_count=retry_count,
+                retry_backoff_base=retry_backoff_base,
+                key_index=key_index,
+                total_keys=len(api_keys),
+            )
+            
+            if result["success"]:
+                return result
+                
+            # Log that this key failed and we're trying the next one
+            logger.warning(
+                f"Groq API key {key_index + 1}/{len(api_keys)} failed, trying next key",
+                extra={"error": result.get("error", "")[:100]},
+            )
+        
+        # All Groq keys failed, try fallback to single key if it exists
+        if settings.groq_api_key:
+            client = _create_client(provider)
+            if client:
+                result = await _try_client(
+                    client=client,
+                    provider=provider,
+                    model=model,
+                    system_prompt=system_prompt,
+                    user_content=user_content,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                    response_schema=response_schema,
+                    retry_count=retry_count,
+                    retry_backoff_base=retry_backoff_base,
+                )
+                if result["success"]:
+                    return result
+    
+    # For other providers or Groq fallback, use single client
     client = _create_client(provider)
     if client is None:
         return {
@@ -157,6 +244,35 @@ async def call_ai(
             "error": f"Provider '{provider}' is not configured or not available.",
         }
 
+    return await _try_client(
+        client=client,
+        provider=provider,
+        model=model,
+        system_prompt=system_prompt,
+        user_content=user_content,
+        temperature=temperature,
+        max_tokens=max_tokens,
+        response_schema=response_schema,
+        retry_count=retry_count,
+        retry_backoff_base=retry_backoff_base,
+    )
+
+
+async def _try_client(
+    client: AsyncOpenAI,
+    provider: str,
+    model: str,
+    system_prompt: str,
+    user_content: str,
+    temperature: float,
+    max_tokens: int,
+    response_schema: Optional[Type[BaseModel]],
+    retry_count: int,
+    retry_backoff_base: float,
+    key_index: int = 0,
+    total_keys: int = 1,
+) -> dict[str, Any]:
+    """Try calling AI with a specific client."""
     last_error = None
 
     for attempt in range(1, retry_count + 1):
@@ -193,17 +309,19 @@ async def call_ai(
             content = response.choices[0].message.content or ""
             tokens_used = response.usage.total_tokens if response.usage else 0
 
-            logger.info(
-                "AI call succeeded",
-                extra={
-                    "provider": provider,
-                    "model": model,
-                    "attempt": attempt,
-                    "latency_ms": round(latency_ms, 1),
-                    "tokens": tokens_used,
-                    "temperature": temperature,
-                },
-            )
+            # Add key info to log for Groq failover
+            log_extra = {
+                "provider": provider,
+                "model": model,
+                "attempt": attempt,
+                "latency_ms": round(latency_ms, 1),
+                "tokens": tokens_used,
+                "temperature": temperature,
+            }
+            if provider == "groq" and total_keys > 1:
+                log_extra["api_key"] = f"{key_index + 1}/{total_keys}"
+
+            logger.info("AI call succeeded", extra=log_extra)
 
             parsed = None
             if response_schema is not None:
@@ -224,17 +342,19 @@ async def call_ai(
             latency_ms = (time.monotonic() - start_time) * 1000
             last_error = str(e)
 
-            logger.warning(
-                "AI call failed",
-                extra={
-                    "provider": provider,
-                    "model": model,
-                    "attempt": attempt,
-                    "latency_ms": round(latency_ms, 1),
-                    "error_type": type(e).__name__,
-                    "error_summary": str(e)[:100],
-                },
-            )
+            # Add key info to log for Groq failover
+            log_extra = {
+                "provider": provider,
+                "model": model,
+                "attempt": attempt,
+                "latency_ms": round(latency_ms, 1),
+                "error_type": type(e).__name__,
+                "error_summary": str(e)[:100],
+            }
+            if provider == "groq" and total_keys > 1:
+                log_extra["api_key"] = f"{key_index + 1}/{total_keys}"
+
+            logger.warning("AI call failed", extra=log_extra)
 
             if attempt < retry_count:
                 import asyncio
@@ -352,6 +472,10 @@ async def call_with_fallback(
             chain.append(("groq", PROVIDER_MODELS["groq"]["default"]))
         if settings.has_ollama:
             chain.append(("ollama", settings.ollama_model))
+        if settings.has_mulerouter:
+            chain.append(("mulerouter", PROVIDER_MODELS["mulerouter"]["default"]))
+        if settings.has_dashscope:
+            chain.append(("dashscope", PROVIDER_MODELS["dashscope"]["default"]))
         if settings.has_aisa:
             chain.append(("aisa", PROVIDER_MODELS["aisa"]["default"]))
         if settings.has_openrouter:
@@ -364,6 +488,10 @@ async def call_with_fallback(
             chain.append(("vllm", PROVIDER_MODELS["vllm"]["default"]))
         if settings.has_aisa:
             chain.append(("aisa", PROVIDER_MODELS["aisa"]["default"]))
+        if settings.has_dashscope:
+            chain.append(("dashscope", PROVIDER_MODELS["dashscope"]["default"]))
+        if settings.has_mulerouter:
+            chain.append(("mulerouter", PROVIDER_MODELS["mulerouter"]["default"]))
         if settings.has_groq:
             chain.append(("groq", PROVIDER_MODELS["groq"]["default"]))
         if settings.has_openrouter:

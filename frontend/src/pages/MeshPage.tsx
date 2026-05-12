@@ -78,7 +78,7 @@ function MeshPage() {
               <div className="divide-y divide-[var(--border-subtle)]">
                 {meshNodes.map((node, i) => (
                   <div
-                    key={node.id || i}
+                    key={node.node_id || i}
                     className="flex items-center gap-3 px-4 py-3 hover:bg-[var(--bg-tertiary)] transition-colors"
                   >
                     <StatusIndicator
@@ -87,16 +87,16 @@ function MeshPage() {
                     />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-[var(--text-primary)]">
-                        {node.name || `Node ${node.id?.slice(0, 8)}`}
+                        {node.hostname || node.city || `Node ${node.node_id?.slice(0, 8)}`}
                       </p>
                       <p className="text-[10px] text-[var(--text-muted)] font-mono">
-                        {node.address || node.id}
+                        {node.ip_address || node.node_id}
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
-                      {node.latency !== undefined && (
+                      {node.latency_ms !== undefined && (
                         <span className="text-[10px] font-mono text-[var(--text-muted)] tabular-nums">
-                          {node.latency}ms
+                          {node.latency_ms}ms
                         </span>
                       )}
                       <Badge variant={node.status === 'connected' ? 'immune' : 'threat'}>

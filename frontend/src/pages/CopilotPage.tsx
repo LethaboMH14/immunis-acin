@@ -149,7 +149,7 @@ function CopilotPage() {
             label="Speaking to"
             options={AUDIENCE_OPTIONS}
             value={audience}
-            onChange={(e) => setAudience(e.target.value)}
+            onChange={(e) => setAudience(e.target.value as any)}
             selectSize="sm"
           />
         </div>

@@ -17,7 +17,8 @@ type BadgeVariant =
   | 'threat'
   | 'novel'
   | 'mesh'
-  | 'neutral';
+  | 'neutral'
+  | 'warning';
 
 interface BadgeProps {
   variant?: BadgeVariant;
@@ -79,6 +80,11 @@ const variantStyles: Record<BadgeVariant, { bg: string; text: string; dot: strin
     bg: 'bg-slate-500/10',
     text: 'text-slate-400',
     dot: 'bg-slate-400',
+  },
+  warning: {
+    bg: 'bg-amber-500/15',
+    text: 'text-amber-400',
+    dot: 'bg-amber-400',
   },
 };
 

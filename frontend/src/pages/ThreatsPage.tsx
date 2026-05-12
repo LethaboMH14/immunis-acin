@@ -17,6 +17,8 @@ import { ThreatFeed } from '../components/overview/ThreatFeed';
 import { ThreatDetail } from '../components/threats/ThreatDetail';
 import { ThreatStats } from '../components/threats/ThreatStats';
 import { LanguageBreakdown } from '../components/threats/LanguageBreakdown';
+import { AttackGraph } from '../components/visualizations';
+import { ExplainabilityPanel } from '../components/explainability';
 import type { Threat } from '../utils/types';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -217,11 +219,39 @@ function ThreatsPage() {
         isOpen={!!selectedThreat}
         onClose={() => setSelectedThreat(null)}
         title="Threat Details"
-        subtitle={selectedThreat?.id}
+        subtitle={selectedThreat?.incident_id}
         size="lg"
       >
         {selectedThreat && <ThreatDetail threat={selectedThreat} />}
       </SlidePanel>
+
+      {/* Attack Kill Chain */}
+      <div style={{
+        padding: '16px',
+        background: 'var(--bg-secondary, #111827)',
+        borderRadius: '12px',
+        border: '1px solid var(--border-primary, rgba(255,255,255,0.06))',
+      }}>
+        <AttackGraph
+          scenario="bec"
+          autoPlay={true}
+          speed={800}
+        />
+      </div>
+
+      {/* Explainability — EU AI Act Compliant */}
+      <div style={{
+        marginTop: '16px',
+        padding: '16px',
+        background: 'var(--bg-secondary, #111827)',
+        borderRadius: '12px',
+        border: '1px solid var(--border-primary, rgba(255,255,255,0.06))',
+      }}>
+        <ExplainabilityPanel
+          threatId={selectedThreat?.incident_id}
+          showAudienceToggle={true}
+        />
+      </div>
     </motion.div>
   );
 }

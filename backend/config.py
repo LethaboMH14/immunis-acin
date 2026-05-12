@@ -52,6 +52,21 @@ class Settings(BaseSettings):
     # === Fallback AI APIs ===
     openrouter_api_key: str = Field(default="")
     groq_api_key: str = Field(default="")
+    groq_api_keys: list[str] = Field(default_factory=list)
+    
+    # === Additional AI Providers ===
+    # MuleRouter
+    mulerouter_api_key: str = Field(default="")
+    mulerouter_base_url: str = Field(default="https://api.mulerouter.ai/v1")
+    
+    # Alibaba DashScope (Official Qwen API)
+    dashscope_api_key: str = Field(default="")
+    dashscope_base_url: str = Field(default="https://dashscope.aliyuncs.com/compatible-mode/v1")
+
+    # === External APIs ===
+    virustotal_api_key: str = Field(default="", description="VirusTotal API key for threat validation")
+    phishtank_api_key: str = Field(default="", description="PhishTank API key for verified phishing data")
+    nvd_api_key: str = Field(default="", description="NIST NVD API key for vulnerability enrichment")
 
     # === Local Models ===
     ollama_base_url: str = Field(default="http://localhost:11434")
@@ -85,6 +100,11 @@ class Settings(BaseSettings):
     enable_stix_taxii: bool = Field(default=True)
     enable_biometrics: bool = Field(default=False)
     enable_post_quantum: bool = Field(default=True)
+    
+    # === Autonomous Battleground ===
+    autonomous_battleground_enabled: bool = Field(default=True)
+    battleground_interval_seconds: int = Field(default=30)
+    battleground_startup_delay_seconds: int = Field(default=60)
 
     # === Thresholds ===
     battleground_max_iterations: int = Field(default=20)
@@ -184,12 +204,34 @@ class Settings(BaseSettings):
     @property
     def has_groq(self) -> bool:
         """Whether Groq is configured."""
-        return bool(self.groq_api_key and self.groq_api_key != "your_groq_key_here")
+        return bool(
+            (self.groq_api_key and self.groq_api_key != "your_groq_key_here") or 
+            self.groq_api_keys
+        )
+    
+    @property
+    def groq_key_count(self) -> int:
+        """Number of available Groq API keys."""
+        count = 0
+        if self.groq_api_key and self.groq_api_key != "your_groq_key_here":
+            count += 1
+        count += len(self.groq_api_keys)
+        return count
 
     @property
     def has_openrouter(self) -> bool:
         """Whether OpenRouter is configured."""
         return bool(self.openrouter_api_key and self.openrouter_api_key != "your_openrouter_key_here")
+
+    @property
+    def has_mulerouter(self) -> bool:
+        """Whether MuleRouter is configured."""
+        return bool(self.mulerouter_api_key and self.mulerouter_api_key != "your_mulerouter_key_here")
+
+    @property
+    def has_dashscope(self) -> bool:
+        """Whether DashScope is configured."""
+        return bool(self.dashscope_api_key and self.dashscope_api_key != "your_dashscope_key_here")
 
     def get_best_available_provider(self) -> str:
         """
@@ -198,15 +240,20 @@ class Settings(BaseSettings):
         DEVELOPMENT priority (cost-optimised):
             1. Ollama (free, local, no quota)
             2. Groq (free tier, fast)
-            3. AIsa.one (paid, save for production/training data)
-            4. OpenRouter (paid fallback)
-            5. vLLM (only when fine-tuned models are deployed)
+            3. MuleRouter (paid, save for production/training data)
+            4. DashScope (paid, save for production/training data)
+            5. AIsa.one (paid, save for production/training data)
+            6. OpenRouter (paid fallback)
+            7. vLLM (only when fine-tuned models are deployed)
         
         PRODUCTION priority (quality-optimised):
             1. vLLM (fine-tuned models on AMD)
             2. AIsa.one (frontier models)
-            3. Groq (fast inference)
-            4. Ollama (local fallback)
+            3. DashScope (official Qwen API)
+            4. MuleRouter (fallback)
+            5. Groq (fast inference)
+            6. OpenRouter (fallback)
+            7. Ollama (local fallback)
         """
         if self.debug:
             # Development mode — prioritise fast + free
@@ -214,6 +261,10 @@ class Settings(BaseSettings):
                 return "groq"  # Free tier, 1-2 second responses
             if self.has_ollama:
                 return "ollama"  # Free but slow on CPU
+            if self.has_mulerouter:
+                return "mulerouter"
+            if self.has_dashscope:
+                return "dashscope"
             if self.has_aisa:
                 return "aisa"
             if self.has_openrouter:
@@ -226,6 +277,10 @@ class Settings(BaseSettings):
                 return "vllm"
             if self.has_aisa:
                 return "aisa"
+            if self.has_dashscope:
+                return "dashscope"
+            if self.has_mulerouter:
+                return "mulerouter"
             if self.has_groq:
                 return "groq"
             if self.has_openrouter:
@@ -242,10 +297,10 @@ class Settings(BaseSettings):
         """
         warnings = []
 
-        if not self.has_aisa and not self.has_vllm and not self.has_ollama and not self.has_groq:
+        if not self.has_aisa and not self.has_vllm and not self.has_ollama and not self.has_groq and not self.has_mulerouter and not self.has_dashscope and not self.has_openrouter:
             warnings.append(
                 "CRITICAL: No AI provider configured. "
-                "Set AISA_API_KEY, GROQ_API_KEY, or ensure Ollama is running. "
+                "Set AISA_API_KEY, GROQ_API_KEY, MULEROUTER_API_KEY, DASHSCOPE_API_KEY, or ensure Ollama is running. "
                 "System will use deterministic fallbacks only."
             )
 
@@ -286,7 +341,36 @@ def get_settings() -> Settings:
     Get cached settings instance.
     Called once at startup, cached forever.
     """
-    return Settings()
+    settings = Settings()
+    
+    # Parse multiple Groq API keys from environment
+    # Support both single GROQ_API_KEY and multiple GROQ_API_KEY_1, GROQ_API_KEY_2, etc.
+    groq_keys = []
+    
+    # Add single key if present
+    if settings.groq_api_key:
+        groq_keys.append(settings.groq_api_key)
+    
+    # Add multiple keys from environment
+    import os
+    i = 1
+    while True:
+        key = os.getenv(f"GROQ_API_KEY_{i}")
+        if key:
+            groq_keys.append(key)
+            i += 1
+        else:
+            break
+    
+    # Remove duplicates while preserving order
+    seen = set()
+    settings.groq_api_keys = [k for k in groq_keys if not (k in seen or seen.add(k))]
+    
+    return settings
+
+
+# Module-level settings instance for easy importing
+settings = get_settings()
 
 
 def print_startup_banner(settings: Settings) -> None:
@@ -314,7 +398,9 @@ def print_startup_banner(settings: Settings) -> None:
     providers = [
         ("vLLM (AMD MI300X)", settings.has_vllm, "Fine-tuned models — production"),
         ("AIsa.one", settings.has_aisa, "Claude/GPT/DeepSeek — training data + production"),
-        ("Groq", settings.has_groq, "Fast inference — Red Agent + development"),
+        ("DashScope", settings.has_dashscope, "Official Qwen API — production"),
+        ("MuleRouter", settings.has_mulerouter, "Multi-model routing — fallback"),
+        ("Groq", settings.has_groq, f"Fast inference — Red Agent + development ({settings.groq_key_count} keys)"),
         ("OpenRouter", settings.has_openrouter, "Multi-model routing — tertiary"),
         ("Ollama (local)", settings.has_ollama, "Local models — development primary"),
     ]

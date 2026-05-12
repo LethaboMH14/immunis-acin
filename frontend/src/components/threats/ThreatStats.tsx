@@ -42,7 +42,7 @@ export function ThreatStats({ threats, className = '' }: ThreatStatsProps) {
       vectors[vec] = (vectors[vec] || 0) + 1;
 
       // Family
-      const fam = t.family || t.type || 'Unknown';
+      const fam = t.attack_family || t.attack_type || 'Unknown';
       families[fam] = (families[fam] || 0) + 1;
 
       // Surprise

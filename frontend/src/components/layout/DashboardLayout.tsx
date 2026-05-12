@@ -26,7 +26,7 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [activeRoute, setActiveRoute] = useState('overview');
-  const { toggleTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   const { toasts, removeToast } = useToast();
   const { threats, antibodies, immunityScore } = useImmunis();
 

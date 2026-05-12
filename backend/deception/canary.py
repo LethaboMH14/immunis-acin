@@ -218,8 +218,9 @@ class CanaryEngine:
             CanaryToken ready for deployment.
         """
         # Generate token ID
+        type_str = token_type.value if hasattr(token_type, 'value') else str(token_type)
         token_id = hashlib.sha256(
-            f"{token_type.value}:{time.time()}:{secrets.token_hex(8)}".encode()
+            f"{type_str}:{time.time()}:{secrets.token_hex(8)}".encode()
         ).hexdigest()[:16]
 
         # Generate token value based on type
@@ -232,7 +233,8 @@ class CanaryEngine:
         salt = secrets.token_hex(8)
 
         # Compute HMAC signature
-        hmac_input = f"{token_type.value}|{token_id}|{salt}".encode()
+        type_str = token_type.value if hasattr(token_type, 'value') else str(token_type)
+        hmac_input = f"{type_str}|{token_id}|{salt}".encode()
         hmac_sig = hmac.new(
             self._secret_key,
             hmac_input,

@@ -138,6 +138,16 @@ Demo mode — Auto-authenticated for hackathon judges
 - **Immunity Ring** — Multi-ring gauge with orbiting particles, conic gradient arcs, breathing center score, color transitions
 - **Honeypot Sandbox** — Terminal aesthetic with scripted attacker session, MITRE ATT&CK annotations, tool detection callouts, auto-looping
 
+### Real-World Validation (NEW)
+- **VirusTotal cross-reference** — compare IMMUNIS vs 70+ commercial AV engines
+- **Live threat feeds** — PhishTank + OpenPhish + URLhaus (real active phishing URLs)
+- **NVD CVE enrichment** — real CVSS scores, real vendor advisories from NIST
+- **MITRE ATT&CK Navigator** — downloadable v4.x layer with 45+ mapped techniques
+- **EU AI Act explainability** — ranked feature attributions, 6 audience formats
+- **Adversarial robustness certificates** — Lipschitz-bounded formal guarantees
+- **Network economics** — ROI projections with real industry data (Ponemon, IBM, Verizon)
+- **Competitive benchmarking** — vs CrowdStrike, Darktrace, SentinelOne, Palo Alto
+
 🔍 Vulnerability Scanner
 
 IMMUNIS doesn't just detect external threats — it examines its own infrastructure:
@@ -243,6 +253,25 @@ Lazy-loaded pages via React.lazy + Suspense
 Keyboard shortcuts for all primary actions
 Demo mode with auto-authentication and sample threats
 Accessibility: focus traps, ARIA labels, prefers-reduced-motion support
+
+## 🧠 Fine-Tuned Models (AMD MI300X + ROCm)
+
+All 3 models fine-tuned on **AMD Instinct MI300X** (192GB HBM3) using
+bf16 LoRA — full precision training without quantization.
+
+| Model | Base | Training Data | Method | Trainable Params |
+|-------|------|--------------|--------|-----------------|
+| IMMUNIS-Sentinel | Qwen2.5-7B-Instruct | 45K examples (15 langs, 11 families) | bf16 LoRA r=64 | 161M (2.08%) |
+| IMMUNIS-Adversary | Qwen2.5-7B-Instruct | 9K evasion variants | bf16 LoRA r=64 | 161M (2.08%) |
+| IMMUNIS-Vision | Qwen2.5-7B-Instruct | 18K visual threat descriptions | bf16 LoRA r=64 | 161M (2.08%) |
+
+**Training Infrastructure:**
+- GPU: AMD Instinct MI300X (192GB HBM3)
+- Software: PyTorch 2.6.0 + ROCm 7.0
+- Method: LoRA (Hu et al., 2021) in bf16 — no quantization needed with 192GB VRAM
+- Optimizer: AdamW (torch native)
+- Credits: AMD Developer Cloud ($100 allocation)
+
 Combined
 ~138 files across backend + frontend
 ~31,000+ lines of code
@@ -251,25 +280,57 @@ End-to-end tested with real multilingual threats
 📱 API Endpoints
 # Threats
 POST /api/threats                    # Analyze a threat
-GET  /api/health                     # Health check
+GET /api/health                     # Health check
+
+# Real-World Validation
+GET /api/virustotal/status              # VirusTotal integration status
+POST /api/virustotal/compare             # IMMUNIS vs VT comparison
+POST /api/virustotal/lookup              # Direct VT indicator lookup
+GET /api/live-threats/stats             # Live phishing feed stats
+GET /api/live-threats/sample            # Sample live threats
+GET /api/live-threats/demo-selection    # Curated demo threats
+POST /api/live-threats/feed-and-analyze  # Analyze live threat
+POST /api/real-world-validation/validate  # Validate real-world threat
+GET /api/real-world-validation/stats    # Real-world validation stats
+
+# Explainability (EU AI Act)
+POST /api/explain                        # Generate detection explanation
+POST /api/explain/audience               # Audience-specific explanation
+GET /api/explain/stats                   # Explainability stats
+
+# Robustness Certificates
+POST /api/certificates/generate          # Generate certificate
+GET /api/certificates/{antibody_id}     # Get certificate
+GET /api/certificates                   # List all certificates
+GET /api/certificates/stats             # Certificate statistics
+GET /api/certificates/validate          # Validate certificate
+
+# MITRE ATT&CK Navigator
+GET /api/mitre/layer                    # Navigator JSON layer
+GET /api/mitre/layer/download           # Download Navigator file
+GET /api/mitre/coverage                 # Coverage statistics
+GET /api/mitre/gaps                     # Gap analysis
+GET /api/mitre/techniques               # All mapped techniques
+GET /api/mitre/compare/{actor}          # Compare vs threat actor
+GET /api/mitre/actors                   # Available actors
 
 # Evolution & Battleground
-GET  /api/evolution/timeline         # Evolution timeline
-GET  /api/battleground/history       # Battleground history
+GET /api/evolution/timeline         # Evolution timeline
+GET /api/battleground/history       # Battleground history
 
 # Risk & Epidemiology
-GET  /api/risk/portfolio             # Risk portfolio
-GET  /api/risk/allocation            # Portfolio allocation
-GET  /api/epidemiological            # Epidemiological state
+GET /api/risk/portfolio             # Risk portfolio
+GET /api/risk/allocation            # Portfolio allocation
+GET /api/epidemiological            # Epidemiological state
 
 # Scanner
 POST /api/scanner/static             # Run SAST scan
 POST /api/scanner/dynamic            # Run DAST scan
 POST /api/scanner/infra              # Run infrastructure audit
-GET  /api/scanner/results            # Get scan results
+GET /api/scanner/results            # Get scan results
 
 # Compliance
-GET  /api/compliance/posture         # Compliance posture
+GET /api/compliance/posture         # Compliance posture
 POST /api/compliance/assess          # Run assessment
 POST /api/compliance/report          # Generate report
 
@@ -280,7 +341,7 @@ POST /api/copilot/fix                # Suggest fix
 POST /api/copilot/plan               # Remediation plan
 
 # TAXII
-GET  /taxii2/                        # TAXII discovery
+GET /api/taxii2/                        # TAXII discovery
 GET  /taxii2/collections/            # TAXII collections
 🧪 Testing
 pytest                               # Run all tests

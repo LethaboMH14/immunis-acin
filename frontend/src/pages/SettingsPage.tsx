@@ -10,7 +10,7 @@ import { Select } from '../components/common/Select';
 import { Toggle } from '../components/common/Toggle';
 import { Badge } from '../components/common/Badge';
 import { useTheme } from '../providers/ThemeProvider';
-import { useAuth } from '../providers/AuthProvider';
+import { useAuth } from '../hooks/useAuth';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 // ─── Types ────────────────────────────────────────────────────────────────────

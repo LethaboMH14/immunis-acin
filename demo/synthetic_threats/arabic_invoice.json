@@ -1,0 +1,80 @@
+{
+  "id": "demo-arabic-invoice-001",
+  "name": "Arabic Invoice Fraud — UAE Logistics Supply Chain",
+  "act": 5,
+  "demo_timing": {
+    "submit_at_seconds": 240,
+    "expected_pipeline_seconds": 18,
+    "narration_start": "Now we go international. An Arabic invoice fraud targets a UAE logistics company — showing IMMUNIS works across scripts, currencies, and cultures."
+  },
+  "threat": {
+    "content_type": "email",
+    "source": "email",
+    "subject": "عاجل: فاتورة متأخرة — تحديث تفاصيل الدفع المطلوب فوراً",
+    "sender": {
+      "display_name": "قسم المالية — الخليج للخدمات اللوجستية",
+      "email": "finance@al-khaleej-logistics.ae",
+      "spoofed_domain": "al-khаleej-logistics.ae",
+      "homoglyph_note": "Cyrillic 'а' (U+0430) used instead of Latin 'a' (U+0061) in 'khaleej' — visually identical but different Unicode codepoint"
+    },
+    "recipient": {
+      "display_name": "السيد أحمد الفهد",
+      "role": "Accounts Payable Manager",
+      "organization": "Dubai Maritime Freight Solutions LLC"
+    },
+    "headers": {
+      "reply_to": "finance.alkhaleej@outlook.com",
+      "x_originating_ip": "176.119.4.67",
+      "received_from": "mail.bulletproof-host.xyz"
+    },
+    "body": "السلام عليكم ورحمة الله وبركاته\n\nالسيد أحمد الفهد المحترم،\n\nأكتب إليكم بخصوص الفاتورة رقم INV-2025-KHL-0394 المؤرخة في 15 أبريل 2025 بمبلغ 847,500.00 درهم إماراتي (AED) والمتعلقة بخدمات الشحن البحري للربع الأول.\n\nنود إبلاغكم بأننا قمنا مؤخراً بتغيير بنكنا الرئيسي من بنك أبوظبي الأول إلى بنك المشرق بسبب إعادة هيكلة مالية داخلية. نرجو تحديث تفاصيل الدفع في أنظمتكم:\n\nاسم الحساب: الخليج للخدمات اللوجستية ذ.م.م\nالبنك: بنك المشرق\nرقم الآيبان: AE420351234567890123456\nرمز السويفت: BOMLAEAD\nالمرجع: KHL-DMF-Q1-2025\n\nنؤكد أن جميع المبالغ السابقة قد تم استلامها بنجاح. هذا التغيير يسري فقط على المدفوعات الجديدة ابتداءً من هذا الشهر.\n\nنظراً لأن الفاتورة قد تجاوزت موعد الاستحقاق بـ 15 يوماً، نرجو معالجة الدفع في أقرب وقت ممكن لتجنب أي تأثير على جدول الشحن القادم.\n\nللتأكيد، يمكنكم الاتصال بي مباشرة على الرقم أدناه. أرجو عدم استخدام الرقم القديم حيث تم تغييره.\n\nمع أطيب التحيات،\n\nنورة العلي\nمديرة الحسابات\nالخليج للخدمات اللوجستية ذ.م.م\nطريق الشيخ زايد، برج المارينا، الطابق34\nدبي، الإمارات العربية المتحدة\nهاتف: +971 4 555 8901\nجوال: +971 50 445 6789\n\nهذه الرسالة سرية وموجهة فقط للمستلم المقصود.",
+    "body_english_gloss": "Peace be upon you and God's mercy and blessings,\n\nDear Mr Ahmed Al-Fahd,\n\nI am writing to you regarding Invoice No. INV-2025-KHL-0394 dated April15, 2025 for AED 847,500.00 relating to maritime shipping services for Q1.\n\n We would like to inform you that we have recently changed our primary bank from First Abu Dhabi Bank to Mashreq Bank due to an internal financial restructuring. Please update your payment details in your systems:\n\nAccount name: Al Khaleej Logistics LLC\nBank: Mashreq Bank\nIBAN: AE420351234567890123456\nSWIFT: BOMLAEAD\nReference: KHL-DMF-Q1-2025\n\nWe confirm that all previous amounts have been successfully received. This change applies only to new payments starting this month.\n\nAs the invoice is 15 days past due, please process payment as soon as possible to avoid any impact on the upcoming shipping schedule.\n\nFor confirmation, you may call me directly at the number below. Please do not use the old number as it has been changed.\n\nBest regards,\n\nNoura Al-Ali\nAccounts Manager\nAl Khaleej Logistics LLC\nSheikh Zayed Road, Marina Tower,34th Floor\nDubai, United Arab Emirates\nPhone: +971 4 555 8901\nMobile: +971 50 445 6789\n\nThis message is confidential and intended only for the intended recipient.",
+    "social_engineering_markers": {
+      "authority": "Impersonates known supplier's finance department with correct company structure",
+      "urgency": "Invoice 15 days overdue, shipping schedule at risk — supply chain pressure",
+      "legitimacy_anchors": "Real bank names (FAB, Mashreq), valid IBAN format (AE + 21 digits), real SWIFT format, realistic Dubai address (Sheikh Zayed Road), proper Islamic greeting",
+      "bank_change_pretext": "Classic vendor email compromise — change bank details during 'restructuring'. The most successful B2B fraud globally (FBI IC3 reports $2.7B losses in 2023)",
+      "cultural_context": "Islamic greeting (full Salam) establishes religious authenticity. Formal Arabic business register used throughout. UAE business culture emphasizes relationship continuity, making questioning a vendor change feel disrespectful.",
+      "isolation": "Do not use old phone number — prevents calling the real contact to verify"
+    }
+  },
+  "expected_results": {
+    "language_detected": "ar",
+    "language_name": "Arabic (Modern Standard)",
+    "code_switch_detected": true,
+    "code_switch_details": "Arabic body with English financial identifiers (IBAN, SWIFT, Invoice No., AED, Q1)",
+    "homoglyphs_detected": true,
+    "homoglyph_details": "Cyrillic а (U+0430) substituted for Latin a (U+0061) in domain — cross-script homoglyph attack",
+    "classification": "variant",
+    "severity": "critical",
+    "surprise_bits": 6.4,
+    "attack_family": "BEC_VendorEmailCompromise",
+    "attack_techniques": ["T1566.001", "T1534", "T1036.005", "T1199"],
+    "mitre_mapping": {
+      "T1566.001": "Phishing: Spearphishing Attachment",
+      "T1534": "Internal Spearphishing",
+      "T1036.005": "Masquerading: Match Legitimate Name or Location",
+      "T1199": "Trusted Relationship"
+    },
+    "confidence_text": 0.93,
+    "confidence_fused": 0.93,
+    "se_scores": {
+      "urgency": 0.82,
+      "authority": 0.78,
+      "fear": 0.65,
+      "financial_request": 0.96,
+      "isolation": 0.80,
+      "impersonation": 0.88
+    },
+    "financial_exposure": {
+      "direct": "AED 847,500 (~R4,200,000)",
+      "currency": "AED"
+    }
+  },
+  "demo_narration": {
+    "on_submit": "Now we go international. An Arabic invoice fraud targets a UAE logistics company. The attacker uses a Cyrillic homoglyph — a single character substitution invisible to the human eye but detected by IMMUNIS at the Unicode level.",
+    "on_detection": "IMMUNIS processes right-to-left Arabic text natively. Surprise score: 6.4 bits — VARIANT of BEC family. The system recognizes the vendor email compromise pattern across languages.",
+    "on_financial": "Exposure: 847,500 AED — approximately 4.2 million Rand. The actuarial engine computes tail risk across currencies.",
+    "mind_blow": "Same attack family, different continent, different language, different script direction. IMMUNIS sees through it because it detects INTENT, not keywords."
+  }
+}

@@ -2,11 +2,9 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  plugins: [
-    react(),
-  ],
+  plugins: [react()],
   server: {
-    port: 3000,
+    port: 3001,
     proxy: {
       '/api': {
         target: 'http://localhost:8000',
@@ -15,10 +13,6 @@ export default defineConfig({
       '/ws': {
         target: 'ws://localhost:8000',
         ws: true,
-      },
-      '/taxii2': {
-        target: 'http://localhost:8000',
-        changeOrigin: true,
       },
     },
   },

@@ -12,6 +12,10 @@ import { Card } from '../components/common/Card';
 import { Badge } from '../components/common/Badge';
 import { ProgressBar, CircularProgress } from '../components/common/ProgressBar';
 import { EvolutionSparkline } from '../components/overview/EvolutionSparkline';
+import { ExplainabilityPanel } from '../components/explainability';
+import { NetworkEconomicsPanel } from '../components/economics';
+import { BenchmarkPanel } from '../components/benchmarks';
+import { AttackGraph } from '../components/visualizations';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -46,11 +50,10 @@ const itemVariants = {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function formatZAR(value: number): string {
-  if (value >= 1_000_000) return `R${(value / 1_000_000).toFixed(1)}M`;
-  if (value >= 1_000) return `R${(value / 1_000).toFixed(0)}K`;
-  return `R${value.toFixed(0)}`;
-}
+const formatZAR = (value: number | undefined | null) => {
+  if (value === undefined || value === null) return 'R0';
+  return `R${value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+};
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -129,7 +132,7 @@ function AnalyticsPage() {
         <motion.div variants={itemVariants}>
           <Card variant="flat" padding="md">
             <p className="text-2xl font-bold text-purple-400 tabular-nums">
-              {risk ? formatZAR(risk.annual_expected_loss) : '—'}
+              {risk?.annual_expected_loss ? formatZAR(risk?.annual_expected_loss) : '—'}
             </p>
             <p className="text-xs text-[var(--text-muted)]">Annual Exp. Loss</p>
             <p className="text-[10px] text-[var(--text-muted)] mt-1">GPD actuarial</p>
@@ -150,19 +153,19 @@ function AnalyticsPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-[var(--text-muted)]">Expected Loss</span>
                   <span className="text-sm font-mono font-semibold text-[var(--text-primary)]">
-                    {formatZAR(risk.expected_loss)}
+                    {risk?.expected_loss ? formatZAR(risk?.expected_loss) : '—'}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-[var(--text-muted)]">VaR (95%)</span>
                   <span className="text-sm font-mono font-semibold text-amber-400">
-                    {formatZAR(risk.var_95)}
+                    {risk?.var_95 ? formatZAR(risk?.var_95) : '—'}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-[var(--text-muted)]">CVaR (95%)</span>
                   <span className="text-sm font-mono font-semibold text-red-400">
-                    {formatZAR(risk.cvar_95)}
+                    {risk?.cvar_95 ? formatZAR(risk?.cvar_95) : '—'}
                   </span>
                 </div>
                 <div className="pt-2 border-t border-[var(--border-subtle)]">
@@ -170,10 +173,10 @@ function AnalyticsPage() {
                     <span className="text-xs text-[var(--text-muted)]">Deterrence Index</span>
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-mono font-semibold text-[var(--text-primary)]">
-                        {risk.deterrence_index.toFixed(2)}
+                        {(risk?.deterrence_index ?? 0).toFixed(2)}
                       </span>
-                      <Badge variant={risk.deterrence_index > 1 ? 'immune' : 'threat'}>
-                        {risk.deterrence_index > 1 ? 'Deterring' : 'Vulnerable'}
+                      <Badge variant={(risk?.deterrence_index ?? 0) > 1 ? 'immune' : 'threat'}>
+                        {(risk?.deterrence_index ?? 0) > 1 ? 'Deterring' : 'Vulnerable'}
                       </Badge>
                     </div>
                   </div>
@@ -209,14 +212,14 @@ function AnalyticsPage() {
                         </span>
                         <div className="flex items-center gap-2">
                           <span className="text-[10px] font-mono text-[var(--text-muted)] tabular-nums">
-                            SR: {asset.sharpe.toFixed(2)}
+                            SR: {(asset?.sharpe ?? 0).toFixed(2)}
                           </span>
                           <span className="text-[10px] font-mono text-[var(--text-primary)] tabular-nums w-10 text-right">
-                            {(asset.weight * 100).toFixed(1)}%
+                            {((asset?.weight ?? 0) * 100).toFixed(1)}%
                           </span>
                         </div>
                       </div>
-                      <ProgressBar value={asset.weight * 100} variant="info" size="sm" />
+                      <ProgressBar value={(asset?.weight ?? 0) * 100} variant="info" size="sm" />
                     </div>
                   ))}
               </div>
@@ -260,13 +263,13 @@ function AnalyticsPage() {
                   <div className="flex justify-between text-xs">
                     <span className="text-[var(--text-muted)]">R₀</span>
                     <span className="font-mono text-[var(--text-primary)]">
-                      {epidemiologicalState.r0?.toFixed(3)}
+                      {(epidemiologicalState?.r0 ?? 0).toFixed(3)}
                     </span>
                   </div>
                   <div className="flex justify-between text-xs">
                     <span className="text-[var(--text-muted)]">Herd Immunity Threshold</span>
                     <span className="font-mono text-[var(--text-primary)]">
-                      {epidemiologicalState.herd_immunity_pct?.toFixed(1)}%
+                      {(epidemiologicalState?.herd_immunity_pct ?? 0).toFixed(1)}%
                     </span>
                   </div>
                   <div className="flex justify-between text-xs">
@@ -290,6 +293,45 @@ function AnalyticsPage() {
             )}
           </Card>
         </motion.div>
+      </div>
+
+      {/* Network Economics — Business Value */}
+      <div style={{
+        padding: '20px',
+        background: 'var(--bg-secondary, #111827)',
+        borderRadius: '12px',
+        border: '1px solid var(--border-primary, rgba(255,255,255,0.06))',
+        marginTop: '20px',
+      }}>
+        <NetworkEconomicsPanel
+          currentNodes={3}
+          currentR0={2.3}
+        />
+      </div>
+
+      {/* Benchmarks & Competitive Intelligence */}
+      <div style={{
+        padding: '20px',
+        background: 'var(--bg-secondary, #111827)',
+        borderRadius: '12px',
+        border: '1px solid var(--border-primary, rgba(255,255,255,0.06))',
+        marginTop: '20px',
+      }}>
+        <BenchmarkPanel />
+      </div>
+
+      {/* Attack Graph Visualization */}
+      <div style={{
+        padding: '20px',
+        background: 'var(--bg-secondary, #111827)',
+        borderRadius: '12px',
+        border: '1px solid var(--border-primary, rgba(255,255,255,0.06))',
+      }}>
+        <AttackGraph
+          scenario="ransomware"
+          autoPlay={true}
+          speed={900}
+        />
       </div>
     </motion.div>
   );

@@ -245,6 +245,7 @@ class ThreatActorType(str, Enum):
     TYPE_3_RANSOMWARE = "RansomwareGroup"  # Organised crime, weeks
     TYPE_4_APT = "NationStateAPT"          # State-sponsored, months
     TYPE_5_INSIDER = "InsiderThreat"       # Internal, variable
+    AUTONOMOUS = "Autonomous"              # Internal autonomous loop
     UNKNOWN = "Unknown"
 
 
@@ -385,3 +386,25 @@ class VulnerabilitySeverity(str, Enum):
     MEDIUM = "Medium"       # CVSS 4.0-6.9
     LOW = "Low"             # CVSS 0.1-3.9
     INFO = "Info"           # Informational
+
+
+# === ACTUARIAL RISK ===
+
+@unique
+class ActuarialRiskTier(str, Enum):
+    """Actuarial risk classification tier."""
+    CRITICAL = "critical"   # Immediate action required
+    HIGH = "high"           # Action within 24 hours
+    MEDIUM = "medium"       # Action within week
+    LOW = "low"             # Monitor only
+
+
+# === DEFENSE STRATEGY ===
+
+@unique
+class DefenseStrategy(str, Enum):
+    """Defense resource allocation strategies."""
+    REACTIVE = "reactive"       # Respond to threats as they come
+    PROACTIVE = "proactive"     # Build defenses in advance
+    BALANCED = "balanced"       # Mix of reactive and proactive
+    ADAPTIVE = "adaptive"       # AI-driven dynamic allocation
